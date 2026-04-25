@@ -1,0 +1,58 @@
+@use '../variables' as *;
+
+@keyframes letterDrop {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.title-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5vh;
+  gap: 2rem;
+
+  .welcome {
+    font-size: 2.5rem;
+    font-weight: 400;
+    font-family: $font-portfolio;
+    color: var(--c-text);
+    margin-bottom: 0.1rem;
+  }
+
+  .portfolio-title {
+    display: flex;
+    text-transform: uppercase;
+    align-items: baseline;
+    font-family: $font-portfolio;
+    font-size: clamp(3.5rem, 9.5vw, 10.5rem);
+    font-weight: 700;
+    line-height: 1;
+
+    .portfolio-letter {
+      position: relative;
+      display: inline-block;
+      color: $color-red;
+      opacity: 0;
+      animation: letterDrop 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: var(--c-text);
+        transition: color 0.15s ease;
+      }
+    }
+
+    .year-2026 {
+      position: absolute;
+      bottom: -1rem;
+      right: 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: $color-red;
+      letter-spacing: 6px;
+      pointer-events: none;
+    }
+  }
+}

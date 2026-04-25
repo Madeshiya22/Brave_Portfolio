@@ -1,0 +1,79 @@
+@use '../variables' as *;
+
+// ============================================================
+//  HERO SEARCH  –  frosted search bar + typing effect cursor
+// ============================================================
+
+.search-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2vh;
+
+  // Dark frosted pill
+  .search-dark {
+    position: relative;
+    z-index: 2;
+    width: 460px;
+    max-width: 88vw;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    background: var(--c-surface);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--c-border);
+    border-radius: 50px;
+    padding: 0.85rem 1.4rem;
+    transition: border-color 0.4s, box-shadow 0.3s, background 0.4s, width 0.3s;
+
+    // Active / focused state
+    &--active {
+      width: 560px;
+      border-color: rgba(204, 26, 26, 0.55);
+      box-shadow: 0 0 0 3px rgba(204, 26, 26, 0.12), 0 0 24px rgba(204, 26, 26, 0.15);
+    }
+
+    // Real input field (replaces typed-text span when active)
+    .search-input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--c-text-muted);
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.01em;
+      caret-color: #ff5500;
+    }
+
+    // Brave hexagon icon
+    .brave-icon {
+      width: 22px;
+      height: 22px;
+      background: #ff4500;
+      border-radius: 4px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      flex-shrink: 0;
+    }
+
+    // Typed text display
+    .typed-text {
+      flex: 1;
+      color: var(--c-text-muted);
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      min-height: 1.4em;
+      letter-spacing: 0.01em;
+    }
+
+    // Blinking cursor
+    .typing-cursor {
+      width: 2px;
+      height: 1.1em;
+      background: $color-orange;
+      border-radius: 1px;
+      flex-shrink: 0;
+      animation: cursorBlink 0.9s step-end infinite;
+    }
+  }
+}

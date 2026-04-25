@@ -1,0 +1,69 @@
+@use '../variables' as *;
+
+// ── Keyframes ──────────────────────────────────────────────────
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes iconPop {
+  from { opacity: 0; transform: translateY(20px) scale(0.8); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes yearPulse {
+  0%, 100% { text-shadow: 0 0 8px rgba(204,26,26,0.5), 0 0 20px rgba(204,26,26,0.2); }
+  50%      { text-shadow: 0 0 18px rgba(204,26,26,0.9), 0 0 40px rgba(255,80,0,0.45); }
+}
+
+// ── Entrance utility classes ───────────────────────────────────
+
+.anim-fade-down {
+  opacity: 0;
+  animation: fadeInDown 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.anim-fade-up {
+  opacity: 0;
+  animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.anim-icon {
+  opacity: 0;
+  animation: iconPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+// ── Per-element dynamic styles ─────────────────────────────────
+
+.hero .year-2026 {
+  animation: yearPulse 2.8s ease-in-out infinite;
+}
+
+.hero .dots span {
+  transition: background 0.3s, transform 0.3s;
+
+  &.active {
+    background: $color-orange;
+    animation: yearPulse 2s ease-in-out infinite;
+  }
+}
+
+.hero .search-dark {
+  transition: border-color 0.3s, box-shadow 0.3s;
+
+  &:hover {
+    border-color: rgba(255, 80, 0, 0.4);
+    box-shadow: 0 0 20px rgba(255, 80, 0, 0.12);
+  }
+}

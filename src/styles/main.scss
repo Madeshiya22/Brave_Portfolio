@@ -1,0 +1,24 @@
+@use 'variables' as *;
+@use 'reset';
+@use 'typography';
+@use 'pages/home';
+
+// Google Fonts – Inter + Outfit
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;700;900&display=swap');
+
+// Fontshare – Panchang (portfolio title)
+@import url('https://api.fontshare.com/v2/css?f[]=panchang@700,800,900&display=swap');
+
+// Lenis smooth scroll base
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}

@@ -1,0 +1,75 @@
+@use '../variables' as *;
+
+// ============================================================
+//  HERO BOTTOM BAR  –  Send Message + Resume + Download
+// ============================================================
+
+// Send Message button (bottom-left)
+.send-msg-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(255, 80, 0, 0.12);
+  border: 1.5px solid rgba(255, 80, 0, 0.55);
+  border-radius: 50px;
+  padding: 0.72rem 1.6rem;
+  color: var(--c-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: background 0.4s, border-color 0.4s, color 0.4s, box-shadow 0.25s, transform 0.2s;
+
+  &:hover {
+    background: rgba(255, 80, 0, 0.28);
+    border-color: rgba(255, 80, 0, 0.9);
+    box-shadow: 0 0 22px 6px rgba(255, 80, 0, 0.35);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  .send-msg-btn__icon {
+    flex-shrink: 0;
+    color: #ff5000;
+  }
+}
+
+// Resume / Download glass buttons (bottom-right)
+.action-btns {
+  display: flex;
+  gap: 12px;
+
+  .glass-btn {
+    background: var(--c-surface);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--c-border-soft);
+    color: var(--c-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    transition: background 0.2s, border-color 0.2s;
+
+    &:hover {
+      background: rgba(55, 55, 55, 0.8);
+      border-color: var(--c-border-soft);
+    }
+
+    &--resume {
+      padding: 0 1.3rem;
+      height: 52px;
+      gap: 0.7rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    &--download {
+      width: 52px;
+      height: 52px;
+    }
+  }
+}

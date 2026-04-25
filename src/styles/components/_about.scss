@@ -1,0 +1,316 @@
+@use '../variables' as *;
+
+// ── Overlay backdrop ──────────────────────────────────────────
+.about-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: overlayIn 0.35s ease forwards;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+// ── Main panel ────────────────────────────────────────────────
+.about-panel {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: min(1100px, 92vw);
+  min-height: 560px;
+  background: #131313;
+  border-radius: 4px;
+  overflow: hidden;
+  animation: panelIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+  // Subtle red left-edge accent
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, $color-red, transparent 80%);
+  }
+}
+
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(28px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+// ── Close button ──────────────────────────────────────────────
+.about-close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  color: rgba(255, 255, 255, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    background: rgba(204, 26, 26, 0.2);
+    color: #fff;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  LEFT — text content
+// ═══════════════════════════════════════════════════════════════
+.about-left {
+  padding: 4rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.4rem;
+  background: #1c1b1b;
+}
+
+// "ABOUT ME" label
+.about-label {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $color-red;
+
+  &__line {
+    display: block;
+    width: 36px;
+    height: 2px;
+    background: $color-red;
+    border-radius: 2px;
+  }
+}
+
+// Name
+.about-name {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  font-weight: 800;
+  color: #e5e2e1;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+// Role subtitle
+.about-role {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #ac8883;
+  letter-spacing: 0.01em;
+}
+
+// Bio paragraph
+.about-bio {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: rgba(229, 226, 225, 0.65);
+  max-width: 420px;
+}
+
+// Skill tags
+.about-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #e6bdb8;
+  background: rgba(204, 26, 26, 0.1);
+  border: 1px solid rgba(204, 26, 26, 0.2);
+  transition: background 0.2s, border-color 0.2s;
+
+  &:hover {
+    background: rgba(204, 26, 26, 0.2);
+    border-color: rgba(204, 26, 26, 0.45);
+  }
+}
+
+// CV download button
+.about-cv-btn {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1.8rem;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #ff5500, $color-red);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.25s;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(204, 26, 26, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  RIGHT — photo + stats
+// ═══════════════════════════════════════════════════════════════
+.about-right {
+  position: relative;
+  background: #131313;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2.5rem;
+  gap: 1.5rem;
+  overflow: hidden;
+}
+
+// Dot-grid background
+.about-dotgrid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  padding: 1.5rem;
+  pointer-events: none;
+
+  .dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(204, 26, 26, 0.18);
+    align-self: center;
+    justify-self: center;
+  }
+}
+
+// Photo frame
+.about-photo {
+  position: relative;
+  width: 260px;
+  height: 320px;
+  z-index: 1;
+
+  // Corner accents
+  .corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+
+    &--tl {
+      top: -2px;
+      left: -2px;
+      border-top: 2px solid $color-red;
+      border-left: 2px solid $color-red;
+    }
+
+    &--br {
+      bottom: -2px;
+      right: -2px;
+      border-bottom: 2px solid $color-red;
+      border-right: 2px solid $color-red;
+    }
+  }
+
+  &__inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(204, 26, 26, 0.25);
+    box-shadow: 0 0 40px rgba(204, 26, 26, 0.15), 0 0 80px rgba(204, 26, 26, 0.06);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(15%);
+    }
+  }
+
+  &__grad {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(to top, rgba(19, 19, 19, 0.85), transparent);
+    pointer-events: none;
+  }
+}
+
+// Floating stat cards
+.about-stats {
+  display: flex;
+  gap: 0.75rem;
+  z-index: 1;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 4px;
+  background: rgba(42, 42, 42, 0.9);
+  border: 1px solid rgba(204, 26, 26, 0.15);
+  backdrop-filter: blur(10px);
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    border-color: rgba(204, 26, 26, 0.4);
+    box-shadow: 0 0 18px rgba(204, 26, 26, 0.15);
+  }
+
+  strong {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: $color-red;
+    line-height: 1;
+  }
+
+  span {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(229, 226, 225, 0.5);
+  }
+}
