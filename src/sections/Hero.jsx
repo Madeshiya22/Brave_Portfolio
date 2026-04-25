@@ -6,9 +6,11 @@ import HeroSearch    from '../components/HeroSearch';
 import HeroTitle     from '../components/HeroTitle';
 import HeroBottomBar from '../components/HeroBottomBar';
 import ContactModal  from '../components/ContactModal';
+import About         from '../components/About';
 
 const Hero = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const [mouse, setMouse]         = useState({ x: 0, y: 0 });
   const [theme, setTheme]         = useState('night');
   const heroRef = useRef(null);
@@ -32,13 +34,17 @@ const Hero = () => {
         <HeroParticles />
         <HeroTopBar theme={theme} setTheme={setTheme} />
         <div className="hero__center">
-          <HeroSearch />
+          <HeroSearch
+            onOpenAbout={() => setAboutOpen(true)}
+            onOpenContact={() => setModalOpen(true)}
+          />
           <HeroTitle mouse={mouse} />
         </div>
         <HeroBottomBar onOpenModal={() => setModalOpen(true)} />
       </section>
 
       {modalOpen && <ContactModal onClose={() => setModalOpen(false)} />}
+      {aboutOpen && <About onClose={() => setAboutOpen(false)} />}
     </>
   );
 };

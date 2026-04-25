@@ -1,100 +1,133 @@
 import React from 'react';
-import { Download, X, Code2, Server, Palette, Database } from 'lucide-react';
+import { X, Target, Rocket, Zap } from 'lucide-react';
 
-const SKILLS = [
-  { label: 'React',     Icon: Code2    },
-  { label: 'Node.js',   Icon: Server   },
-  { label: 'SCSS',      Icon: Palette  },
-  { label: 'MongoDB',   Icon: Database },
-  { label: 'Vite',      Icon: Code2    },
-  { label: 'Figma',     Icon: Palette  },
-];
-
-const STATS = [
-  { value: '3+',  label: 'Years Exp'  },
-  { value: '20+', label: 'Projects'   },
-  { value: '5+',  label: 'Clients'    },
+const DRIVES = [
+  {
+    Icon: Target,
+    title: 'Building with Purpose',
+    desc: 'I focus on building projects that solve real problems and create real value.',
+  },
+  {
+    Icon: Rocket,
+    title: 'Always Improving',
+    desc: "I'm constantly learning, exploring new technologies, and leveling up myself.",
+  },
+  {
+    Icon: Zap,
+    title: 'Impact Over Everything',
+    desc: "Clean code, great performance, and happy users — that's what I aim for.",
+  },
 ];
 
 const About = ({ onClose }) => (
   <div className="about-overlay" onClick={onClose}>
-    <section className="about-panel" onClick={(e) => e.stopPropagation()}>
+    <article className="about-panel" onClick={(e) => e.stopPropagation()}>
 
-      {/* Close button */}
       <button className="about-close" onClick={onClose} aria-label="Close">
-        <X size={20} />
+        <X size={18} />
       </button>
 
-      {/* ── LEFT — text content ── */}
-      <div className="about-left">
-        <div className="about-label">
-          <span className="about-label__line" />
-          <span>ABOUT ME</span>
-        </div>
+      {/* ══ HERO STRIP ══════════════════════════════════════ */}
+      <div className="about-hero">
 
-        <h2 className="about-name">Rahul<br />Madeshiya</h2>
-
-        <p className="about-role">Full-Stack Developer &amp; UI Designer</p>
-
-        <p className="about-bio">
-          I craft high-performance web experiences where clean engineering meets
-          bold design. Specialising in React ecosystems and Node.js backends, I
-          turn complex problems into elegant, user-first solutions that are fast,
-          scalable, and beautiful.
-        </p>
-
-        <div className="about-skills">
-          {SKILLS.map(({ label, Icon }) => (
-            <span className="skill-tag" key={label}>
-              <Icon size={12} />
-              {label}
-            </span>
-          ))}
-        </div>
-
-        <button className="about-cv-btn">
-          <Download size={16} />
-          Download CV
-        </button>
-      </div>
-
-      {/* ── RIGHT — photo + stats ── */}
-      <div className="about-right">
-        {/* Dot-grid decoration */}
-        <div className="about-dotgrid" aria-hidden="true">
-          {Array.from({ length: 80 }).map((_, i) => (
-            <span key={i} className="dot" />
-          ))}
-        </div>
-
-        {/* Photo frame */}
-        <div className="about-photo">
-          <div className="about-photo__inner">
-            <img
-              src="https://api.dicebear.com/9.x/pixel-art/svg?seed=Rahul&backgroundColor=1a1a1a"
-              alt="Rahul Madeshiya"
-              draggable={false}
-            />
-            <div className="about-photo__grad" />
+        {/* LEFT */}
+        <div className="about-hero__left">
+          <div className="about-topbar">
+            <span className="about-handle">@rahulmadeshiya</span>
           </div>
 
-          {/* Corner accents */}
-          <span className="corner corner--tl" />
-          <span className="corner corner--br" />
+          <p className="about-eyebrow">
+            <span className="about-dot" /> ABOUT ME
+          </p>
+
+          <h1 className="about-heading">
+            <span className="about-heading__hi">Hi, I'm</span>
+            <span className="about-heading__name">Rahul<br />Madeshiya.</span>
+          </h1>
+
+          <p className="about-role">Full Stack Developer</p>
+
+          <p className="about-bio">
+            I build fast, scalable and user-focused web applications
+            that solve real problems and create real impact.
+          </p>
+
+          <div className="about-quote-box">
+            <span className="about-quote-box__ring" aria-hidden="true">◎</span>
+            <p>
+              I don't just write code,{' '}
+              <em>I build solutions that make a difference.</em>
+            </p>
+          </div>
         </div>
 
-        {/* Floating stat cards */}
-        <div className="about-stats">
-          {STATS.map(({ value, label }) => (
-            <div className="stat-card" key={label}>
-              <strong>{value}</strong>
-              <span>{label}</span>
+        {/* RIGHT — photo */}
+        <div className="about-hero__photo">
+          <img
+            src="../src/assets/rahul.png"
+            alt="Rahul Madeshiya"
+            draggable={false}
+          />
+          <div className="about-hero__photo-grad" />
+        </div>
+      </div>
+
+      {/* ══ BODY ════════════════════════════════════════════ */}
+      <div className="about-body">
+
+        {/* LEFT — story */}
+        <div className="about-story">
+          <h2 className="about-story__heading">
+            I'm a <span>problem solver</span> at heart<br />
+            and a builder by habit.
+          </h2>
+
+          <ul className="about-bullets">
+            <li>
+              My journey as a developer started with curiosity and turned into a
+              passion for building digital experiences that are clean, functional,
+              and meaningful.
+            </li>
+            <li>
+              I enjoy turning ideas into real-world products — whether it's
+              crafting a smooth frontend experience or building a powerful backend
+              that just works.
+            </li>
+            <li>
+              I care about writing clean code, building scalable systems, and
+              delivering value with every project I work on.
+            </li>
+          </ul>
+        </div>
+
+        {/* RIGHT — what drives me */}
+        <div className="about-drives">
+          <h3 className="about-drives__title">What drives me</h3>
+          {DRIVES.map(({ Icon, title, desc }) => (
+            <div className="drive-item" key={title}>
+              <span className="drive-item__icon">
+                <Icon size={18} />
+              </span>
+              <div>
+                <strong>{title}</strong>
+                <p>{desc}</p>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-    </section>
+      {/* ══ FOOTER QUOTE ════════════════════════════════════ */}
+      <div className="about-footer">
+        <span className="about-footer__mark">"</span>
+        <p>
+          Code is how I build,{' '}
+          <span>but impact is why I do it.</span>
+        </p>
+        <em className="about-footer__sig">Rahul</em>
+      </div>
+
+    </article>
   </div>
 );
 

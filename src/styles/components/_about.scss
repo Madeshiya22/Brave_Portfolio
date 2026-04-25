@@ -1,69 +1,62 @@
 @use '../variables' as *;
 
-// ── Overlay backdrop ──────────────────────────────────────────
+// ── Overlay ───────────────────────────────────────────────────
 .about-overlay {
   position: fixed;
   inset: 0;
-  z-index: 100;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(6px);
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: overlayIn 0.35s ease forwards;
+  animation: aboutFadeIn 0.3s ease forwards;
 }
 
-@keyframes overlayIn {
+@keyframes aboutFadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-// ── Main panel ────────────────────────────────────────────────
+// ── Panel ─────────────────────────────────────────────────────
 .about-panel {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: min(1100px, 92vw);
-  min-height: 560px;
-  background: #131313;
-  border-radius: 4px;
-  overflow: hidden;
-  animation: panelIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  width: min(860px, 94vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #111;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  scrollbar-width: none;
+  animation: aboutSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 
-  // Subtle red left-edge accent
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 3px;
-    height: 100%;
-    background: linear-gradient(180deg, $color-red, transparent 80%);
-  }
+  &::-webkit-scrollbar { display: none; }
 }
 
-@keyframes panelIn {
-  from { opacity: 0; transform: translateY(28px) scale(0.97); }
+@keyframes aboutSlideIn {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-// ── Close button ──────────────────────────────────────────────
+// ── Close ─────────────────────────────────────────────────────
 .about-close {
-  position: absolute;
-  top: 1.2rem;
-  right: 1.2rem;
+  position: sticky;
+  top: 1rem;
+  float: right;
+  margin: 1rem 1rem 0 0;
   z-index: 10;
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.07);
   border: none;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
+  clear: both;
 
   &:hover {
     background: rgba(204, 26, 26, 0.2);
@@ -71,246 +64,291 @@
   }
 }
 
-// ═══════════════════════════════════════════════════════════════
-//  LEFT — text content
-// ═══════════════════════════════════════════════════════════════
-.about-left {
-  padding: 4rem 3.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1.4rem;
-  background: #1c1b1b;
-}
-
-// "ABOUT ME" label
-.about-label {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: $color-red;
-
-  &__line {
-    display: block;
-    width: 36px;
-    height: 2px;
-    background: $color-red;
-    border-radius: 2px;
-  }
-}
-
-// Name
-.about-name {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(2.4rem, 4vw, 3.6rem);
-  font-weight: 800;
-  color: #e5e2e1;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-}
-
-// Role subtitle
-.about-role {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #ac8883;
-  letter-spacing: 0.01em;
-}
-
-// Bio paragraph
-.about-bio {
-  font-size: 0.9rem;
-  line-height: 1.75;
-  color: rgba(229, 226, 225, 0.65);
-  max-width: 420px;
-}
-
-// Skill tags
-.about-skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.skill-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.3rem 0.75rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  color: #e6bdb8;
-  background: rgba(204, 26, 26, 0.1);
-  border: 1px solid rgba(204, 26, 26, 0.2);
-  transition: background 0.2s, border-color 0.2s;
-
-  &:hover {
-    background: rgba(204, 26, 26, 0.2);
-    border-color: rgba(204, 26, 26, 0.45);
-  }
-}
-
-// CV download button
-.about-cv-btn {
-  align-self: flex-start;
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0.7rem 1.8rem;
-  border-radius: 4px;
-  background: linear-gradient(135deg, #ff5500, $color-red);
-  color: #fff;
-  font-size: 0.88rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.2s, box-shadow 0.25s;
-
-  &:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(204, 26, 26, 0.4);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-}
-
-// ═══════════════════════════════════════════════════════════════
-//  RIGHT — photo + stats
-// ═══════════════════════════════════════════════════════════════
-.about-right {
-  position: relative;
-  background: #131313;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 2.5rem;
-  gap: 1.5rem;
-  overflow: hidden;
-}
-
-// Dot-grid background
-.about-dotgrid {
-  position: absolute;
-  inset: 0;
+// ══════════════════════════════════════════════════════════════
+//  HERO STRIP
+// ══════════════════════════════════════════════════════════════
+.about-hero {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  padding: 1.5rem;
-  pointer-events: none;
+  grid-template-columns: 1fr 1fr;
+  min-height: 340px;
+  background: linear-gradient(135deg, #0e0e0e 0%, #1a1a1a 100%);
+  clear: both;
+}
 
-  .dot {
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: rgba(204, 26, 26, 0.18);
-    align-self: center;
-    justify-self: center;
+.about-hero__left {
+  padding: 2.5rem 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+// Top handle bar
+.about-topbar {
+  .about-handle {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+    font-weight: 400;
+    letter-spacing: 0.03em;
   }
 }
 
-// Photo frame
-.about-photo {
-  position: relative;
-  width: 260px;
-  height: 320px;
-  z-index: 1;
+// "• ABOUT ME"
+.about-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $color-orange;
+}
 
-  // Corner accents
-  .corner {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    pointer-events: none;
+.about-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: $color-orange;
+  flex-shrink: 0;
+}
 
-    &--tl {
-      top: -2px;
-      left: -2px;
-      border-top: 2px solid $color-red;
-      border-left: 2px solid $color-red;
-    }
+// Big heading
+.about-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05em;
 
-    &--br {
-      bottom: -2px;
-      right: -2px;
-      border-bottom: 2px solid $color-red;
-      border-right: 2px solid $color-red;
-    }
+  &__hi {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: #e8e5e2;
+    line-height: 1;
   }
 
-  &__inner {
+  &__name {
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    font-weight: 900;
+    color: $color-orange;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+}
+
+// Role
+.about-role {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e8e5e2;
+}
+
+// Bio
+.about-bio {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: rgba(232, 229, 226, 0.6);
+  max-width: 320px;
+}
+
+// Quote box
+.about-quote-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin-top: 0.3rem;
+
+  &__ring {
+    font-size: 1.3rem;
+    color: $color-orange;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  p {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: rgba(232, 229, 226, 0.7);
+
+    em {
+      font-style: normal;
+      color: $color-orange;
+      font-weight: 500;
+    }
+  }
+}
+
+// Photo side
+.about-hero__photo {
+  position: relative;
+  overflow: hidden;
+
+  img {
     width: 100%;
     height: 100%;
-    border-radius: 4px;
-    overflow: hidden;
-    border: 1px solid rgba(204, 26, 26, 0.25);
-    box-shadow: 0 0 40px rgba(204, 26, 26, 0.15), 0 0 80px rgba(204, 26, 26, 0.06);
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      filter: grayscale(15%);
-    }
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    filter: grayscale(10%);
   }
 
-  &__grad {
+  &-grad {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 40%;
-    background: linear-gradient(to top, rgba(19, 19, 19, 0.85), transparent);
+    height: 60%;
+    background: linear-gradient(to top, #111 0%, transparent 100%);
     pointer-events: none;
   }
 }
 
-// Floating stat cards
-.about-stats {
-  display: flex;
-  gap: 0.75rem;
-  z-index: 1;
+// ══════════════════════════════════════════════════════════════
+//  BODY (story + drives)
+// ══════════════════════════════════════════════════════════════
+.about-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: #141414;
+  padding: 2.5rem;
+  gap: 2rem;
 }
 
-.stat-card {
+// Story left
+.about-story {
+  &__heading {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-weight: 700;
+    color: #e8e5e2;
+    line-height: 1.4;
+    margin-bottom: 1.2rem;
+
+    span {
+      color: $color-orange;
+    }
+  }
+}
+
+.about-bullets {
+  list-style: none;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
-  padding: 0.6rem 1.1rem;
-  border-radius: 4px;
-  background: rgba(42, 42, 42, 0.9);
-  border: 1px solid rgba(204, 26, 26, 0.15);
-  backdrop-filter: blur(10px);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  gap: 0.9rem;
 
-  &:hover {
-    border-color: rgba(204, 26, 26, 0.4);
-    box-shadow: 0 0 18px rgba(204, 26, 26, 0.15);
+  li {
+    position: relative;
+    padding-left: 1rem;
+    font-size: 0.82rem;
+    line-height: 1.75;
+    color: rgba(232, 229, 226, 0.55);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.6em;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: $color-orange;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// Drives right
+.about-drives {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #e8e5e2;
+    margin-bottom: 0.3rem;
+  }
+}
+
+.drive-item {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+
+  &__icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: rgba(255, 85, 0, 0.15);
+    color: $color-orange;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
 
   strong {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: $color-red;
-    line-height: 1;
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #e8e5e2;
+    margin-bottom: 0.2rem;
   }
 
-  span {
-    font-size: 0.68rem;
+  p {
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: rgba(232, 229, 226, 0.5);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  FOOTER QUOTE
+// ══════════════════════════════════════════════════════════════
+.about-footer {
+  background: #0e0e0e;
+  padding: 1.8rem 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+  &__mark {
+    font-size: 3rem;
+    font-weight: 900;
+    color: $color-orange;
+    line-height: 1;
+    align-self: flex-start;
+    margin-top: -0.2rem;
+  }
+
+  p {
+    font-size: 0.95rem;
     font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(229, 226, 225, 0.5);
+    color: rgba(232, 229, 226, 0.7);
+
+    span {
+      color: $color-orange;
+      font-weight: 600;
+    }
+  }
+
+  &__sig {
+    margin-left: auto;
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-size: 1.6rem;
+    color: rgba(232, 229, 226, 0.35);
+    white-space: nowrap;
   }
 }
