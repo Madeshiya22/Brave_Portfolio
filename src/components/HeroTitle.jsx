@@ -1,13 +1,20 @@
 import React from 'react';
-
 /**
  * HeroTitle
- * Receives `mouse` → { x, y } in range [-0.5, 0.5]
- * Uses it to apply a subtle parallax transform on the title.
+ * Ye component mouse ki position receive karta hai → { x, y }
+ * Jiski range -0.5 se 0.5 tak hoti hai.
  *
- * "Portfolio" is split into individual letter <span>s so that:
- *  • Each letter animates in with a fixed, sequential stagger (no randomness).
- *  • Hovering a letter turns ONLY that letter white — no sibling bleed.
+ * Iska use title par halka sa parallax / move effect dene ke liye hota hai,
+ * taaki mouse move karne par title bhi thoda move kare aur interactive lage.
+ *
+ * "Portfolio" word ko alag-alag letter <span> me split kiya gaya hai,
+ * taaki har letter par alag animation aur hover effect lag sake.
+ *
+ * • Har letter fixed order me ek ke baad ek animate hota hai
+ *   (sequential stagger, random nahi).
+ *
+ * • Kisi ek letter par hover karne se sirf wahi letter white hota hai,
+ *   baaki letters par koi effect nahi hota.
  */
 
 const LETTERS = 'Portfolio'.split('');

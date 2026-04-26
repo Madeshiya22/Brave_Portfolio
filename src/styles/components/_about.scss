@@ -1,354 +1,526 @@
 @use '../variables' as *;
 
-// ── Overlay ───────────────────────────────────────────────────
-.about-overlay {
+.about-desktop {
   position: fixed;
   inset: 0;
-  z-index: 200;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(8px);
+  z-index: 240;
+  pointer-events: none;
+}
+
+.about-window {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: min(920px, 94vw);
+  max-height: min(86vh, 840px);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background:
+    linear-gradient(145deg, rgba(22, 24, 28, 0.82), rgba(13, 15, 19, 0.9)),
+    radial-gradient(circle at 20% 0%, rgba(255, 88, 0, 0.15), transparent 45%);
+  backdrop-filter: blur(18px);
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.52),
+    0 8px 30px rgba(255, 88, 0, 0.1);
+  animation: aboutWindowIn 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: auto;
+}
+
+.about-window.is-dragging {
+  user-select: none;
+  box-shadow:
+    0 38px 94px rgba(0, 0, 0, 0.58),
+    0 10px 34px rgba(255, 88, 0, 0.18);
+}
+
+.about-window__header {
+  height: 52px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  animation: aboutFadeIn 0.3s ease forwards;
+  justify-content: space-between;
+  padding: 0.7rem 0.8rem 0.7rem 1.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
+  cursor: grab;
 }
 
-@keyframes aboutFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+.about-window.is-dragging .about-window__header {
+  cursor: grabbing;
 }
 
-// ── Panel ─────────────────────────────────────────────────────
-.about-panel {
-  position: relative;
-  width: min(860px, 94vw);
-  max-height: 90vh;
-  overflow-y: auto;
-  background: #111;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  scrollbar-width: none;
-  animation: aboutSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-
-  &::-webkit-scrollbar { display: none; }
+.about-window__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.02em;
 }
 
-@keyframes aboutSlideIn {
-  from { opacity: 0; transform: translateY(30px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-// ── Close ─────────────────────────────────────────────────────
-.about-close {
-  position: sticky;
-  top: 1rem;
-  float: right;
-  margin: 1rem 1rem 0 0;
-  z-index: 10;
-  width: 34px;
-  height: 34px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.07);
-  border: none;
-  color: rgba(255, 255, 255, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  clear: both;
-
-  &:hover {
-    background: rgba(204, 26, 26, 0.2);
-    color: #fff;
-  }
-}
-
-// ══════════════════════════════════════════════════════════════
-//  HERO STRIP
-// ══════════════════════════════════════════════════════════════
-.about-hero {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 340px;
-  background: linear-gradient(135deg, #0e0e0e 0%, #1a1a1a 100%);
-  clear: both;
-}
-
-.about-hero__left {
-  padding: 2.5rem 2.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-}
-
-// Top handle bar
-.about-topbar {
-  .about-handle {
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.35);
-    font-weight: 400;
-    letter-spacing: 0.03em;
-  }
-}
-
-// "• ABOUT ME"
-.about-eyebrow {
+.about-window__actions {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: $color-orange;
 }
 
-.about-dot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: $color-orange;
-  flex-shrink: 0;
+.window-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.75);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  cursor: pointer;
 }
 
-// Big heading
-.about-heading {
-  display: flex;
-  flex-direction: column;
-  gap: 0.05em;
-
-  &__hi {
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
-    font-weight: 700;
-    color: #e8e5e2;
-    line-height: 1;
-  }
-
-  &__name {
-    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
-    font-weight: 900;
-    color: $color-orange;
-    line-height: 1;
-    letter-spacing: -0.02em;
-  }
+.window-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
 }
 
-// Role
-.about-role {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #e8e5e2;
+.window-btn--close:hover {
+  background: rgba(204, 26, 26, 0.24);
+  border-color: rgba(204, 26, 26, 0.5);
 }
 
-// Bio
-.about-bio {
-  font-size: 0.85rem;
-  line-height: 1.7;
-  color: rgba(232, 229, 226, 0.6);
-  max-width: 320px;
+.about-window__body {
+  max-height: calc(min(86vh, 840px) - 52px);
+  overflow-y: auto;
+  padding: 1.35rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
 }
 
-// Quote box
-.about-quote-box {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
+.about-window__body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.about-window__body::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.about-intro {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+
+.about-intro__copy {
+  border-radius: 14px;
+  padding: 1.2rem 1.25rem;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 0.85rem 1rem;
-  margin-top: 0.3rem;
-
-  &__ring {
-    font-size: 1.3rem;
-    color: $color-orange;
-    line-height: 1;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  p {
-    font-size: 0.82rem;
-    line-height: 1.6;
-    color: rgba(232, 229, 226, 0.7);
-
-    em {
-      font-style: normal;
-      color: $color-orange;
-      font-weight: 500;
-    }
-  }
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-// Photo side
-.about-hero__photo {
+.about-intro__eyebrow {
+  margin: 0 0 0.7rem;
+  font-size: 0.73rem;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: rgba(255, 112, 42, 0.9);
+}
+
+.about-intro__copy h3 {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.2vw, 1.75rem);
+  color: #fff;
+  line-height: 1.25;
+}
+
+.about-intro__copy p {
+  margin: 0.85rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.72;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.about-intro__image-wrap {
   position: relative;
+  border-radius: 14px;
   overflow: hidden;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top center;
-    display: block;
-    filter: grayscale(10%);
-  }
-
-  &-grad {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 60%;
-    background: linear-gradient(to top, #111 0%, transparent 100%);
-    pointer-events: none;
-  }
+  min-height: 250px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-// ══════════════════════════════════════════════════════════════
-//  BODY (story + drives)
-// ══════════════════════════════════════════════════════════════
-.about-body {
+.about-intro__image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  filter: saturate(1.08);
+}
+
+.about-intro__badge {
+  position: absolute;
+  left: 0.9rem;
+  bottom: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(11, 12, 15, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  padding: 0.38rem 0.65rem;
+  color: #f8f8f8;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0;
-  background: #141414;
-  padding: 2.5rem;
-  gap: 2rem;
+  gap: 1rem;
 }
 
-// Story left
-.about-story {
-  &__heading {
-    font-size: clamp(1.1rem, 2vw, 1.4rem);
-    font-weight: 700;
-    color: #e8e5e2;
-    line-height: 1.4;
-    margin-bottom: 1.2rem;
-
-    span {
-      color: $color-orange;
-    }
-  }
-}
-
-.about-bullets {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-
-  li {
-    position: relative;
-    padding-left: 1rem;
-    font-size: 0.82rem;
-    line-height: 1.75;
-    color: rgba(232, 229, 226, 0.55);
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0.6em;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: $color-orange;
-      flex-shrink: 0;
-    }
-  }
-}
-
-// Drives right
-.about-drives {
+.about-card {
+  border-radius: 14px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+}
+
+.about-card h4 {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  font-size: 0.98rem;
+}
+
+.about-card__items {
+  margin-top: 0.9rem;
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 0.75rem;
+}
 
-  &__title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #e8e5e2;
-    margin-bottom: 0.3rem;
+.about-expertise-item {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+}
+
+.about-expertise-item__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  flex-shrink: 0;
+  color: #ff7a3a;
+  background: rgba(255, 122, 58, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-expertise-item strong {
+  display: block;
+  color: #fff;
+  font-size: 0.85rem;
+  margin-bottom: 0.16rem;
+}
+
+.about-expertise-item p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  line-height: 1.58;
+}
+
+.about-mindset-list {
+  margin: 0.95rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.about-mindset-list li {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.84rem;
+  line-height: 1.54;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.about-mindset-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.52rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: $color-orange;
+}
+
+.about-stack-title {
+  margin: 1rem 0 0.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.about-stack-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.about-stack-chips span {
+  border-radius: 999px;
+  padding: 0.34rem 0.68rem;
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.83);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.about-taskbar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 10px;
+  width: fit-content;
+  max-width: calc(100vw - 24px);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(11, 13, 17, 0.88);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.34);
+  padding: 0.36rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.34rem;
+  overflow: visible;
+  pointer-events: auto;
+  animation: aboutMinimizedIn 0.16s ease-out;
+}
+
+.about-taskbar__slot {
+  position: relative;
+}
+
+.about-taskbar__item {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.85);
+  height: 32px;
+  padding: 0 0.62rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.14s ease, border-color 0.14s ease;
+}
+
+.about-taskbar__item:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.about-taskbar__item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.about-taskbar__item.is-active {
+  background: rgba(255, 118, 55, 0.2);
+  border-color: rgba(255, 118, 55, 0.36);
+}
+
+.about-taskbar__preview {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%) translateY(6px) scale(0.985);
+  width: 248px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(19, 20, 24, 0.96);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.14s ease-out, transform 0.14s ease-out, visibility 0.14s ease-out;
+  z-index: 2;
+}
+
+.about-taskbar__slot:hover .about-taskbar__preview,
+.about-taskbar__slot:focus-within .about-taskbar__preview {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.about-taskbar__preview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.46rem 0.52rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.about-taskbar__preview-head span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.79rem;
+  font-weight: 700;
+}
+
+.about-taskbar__preview-close {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.78);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.about-taskbar__preview-close:hover {
+  background: rgba(204, 26, 26, 0.28);
+  border-color: rgba(204, 26, 26, 0.44);
+  color: #fff;
+}
+
+.about-taskbar__preview-body {
+  width: 100%;
+  border: none;
+  padding: 0.5rem;
+  margin: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.45rem;
+  cursor: pointer;
+}
+
+.about-taskbar__preview-body img {
+  width: 100%;
+  height: 106px;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.about-taskbar__preview-copy strong {
+  display: block;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.74rem;
+  margin-bottom: 0.15rem;
+}
+
+.about-taskbar__preview-copy p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.67rem;
+  line-height: 1.4;
+}
+
+@keyframes aboutWindowIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 
-.drive-item {
-  display: flex;
-  gap: 0.9rem;
-  align-items: flex-start;
+@keyframes aboutMinimizedIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  &__icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-    background: rgba(255, 85, 0, 0.15);
-    color: $color-orange;
-    display: flex;
-    align-items: center;
+@media (max-width: 900px) {
+  .about-window {
+    width: 95vw;
+    max-height: 88vh;
+  }
+
+  .about-window__body {
+    max-height: calc(88vh - 52px);
+    padding: 1rem;
+  }
+
+  .about-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .about-intro__image-wrap {
+    min-height: 220px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .about-window__title {
+    font-size: 0.88rem;
+  }
+
+  .window-btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .about-intro__copy h3 {
+    font-size: 1.1rem;
+  }
+
+  .about-intro__copy p {
+    font-size: 0.86rem;
+  }
+
+  .about-taskbar {
+    left: 50%;
+    width: calc(100vw - 20px);
+    gap: 0.35rem;
+    overflow-x: auto;
     justify-content: center;
+  }
+
+  .about-taskbar__item {
     flex-shrink: 0;
   }
 
-  strong {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #e8e5e2;
-    margin-bottom: 0.2rem;
-  }
-
-  p {
-    font-size: 0.78rem;
-    line-height: 1.6;
-    color: rgba(232, 229, 226, 0.5);
-  }
-}
-
-// ══════════════════════════════════════════════════════════════
-//  FOOTER QUOTE
-// ══════════════════════════════════════════════════════════════
-.about-footer {
-  background: #0e0e0e;
-  padding: 1.8rem 2.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-
-  &__mark {
-    font-size: 3rem;
-    font-weight: 900;
-    color: $color-orange;
-    line-height: 1;
-    align-self: flex-start;
-    margin-top: -0.2rem;
-  }
-
-  p {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: rgba(232, 229, 226, 0.7);
-
-    span {
-      color: $color-orange;
-      font-weight: 600;
-    }
-  }
-
-  &__sig {
-    margin-left: auto;
-    font-family: Georgia, serif;
-    font-style: italic;
-    font-size: 1.6rem;
-    color: rgba(232, 229, 226, 0.35);
-    white-space: nowrap;
+  .about-taskbar__preview {
+    display: none;
   }
 }

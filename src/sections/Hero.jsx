@@ -44,7 +44,9 @@ const Hero = () => {
       </section>
 
       {modalOpen && <ContactModal onClose={() => setModalOpen(false)} />}
-      {aboutOpen && <About onClose={() => setAboutOpen(false)} />}
+      {aboutOpen && (
+        <About onClose={() => setAboutOpen(false)} />
+      )}
     </>
   );
 };
