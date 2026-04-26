@@ -1,13 +1,13 @@
 import React from 'react';
 import useLenis from './hooks/useLenis';
-import Hero from './sections/Hero';
+import Home from './features/home/Home';
 
 function App() {
   useLenis();
 
   return (
     <main className="app-container">
-      <Hero />
+      <Home />
     </main>
   );
 }

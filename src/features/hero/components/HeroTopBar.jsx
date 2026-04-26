@@ -5,9 +5,9 @@ import Clock from './Clock';
 
 const SOCIAL_LINKS = [
   { href: '#', cls: 'icon-btn--instagram', Icon: FaInstagram, label: 'Instagram' },
-  { href: '#', cls: 'icon-btn--linkedin',  Icon: FaLinkedin,  label: 'LinkedIn'  },
-  { href: '#', cls: 'icon-btn--github',    Icon: FaGithub,    label: 'GitHub'    },
-  { href: '#', cls: 'icon-btn--whatsapp',  Icon: FaWhatsapp,  label: 'WhatsApp'  },
+  { href: '#', cls: 'icon-btn--linkedin', Icon: FaLinkedin, label: 'LinkedIn' },
+  { href: '#', cls: 'icon-btn--github', Icon: FaGithub, label: 'GitHub' },
+  { href: '#', cls: 'icon-btn--whatsapp', Icon: FaWhatsapp, label: 'WhatsApp' },
 ];
 
 const HeroTopBar = ({ theme, setTheme }) => {
@@ -23,16 +23,12 @@ const HeroTopBar = ({ theme, setTheme }) => {
     closeTimer.current = setTimeout(() => setOpen(false), 250);
   };
 
-
   return (
     <div className="hero__top anim-fade-down">
-
-      {/* Clock – top left */}
       <div className="clock-block">
         <Clock />
       </div>
 
-      {/* Social Media – top center */}
       <div className="social-cluster">
         <span className="social-label">Social Media</span>
         <div className="icons-row">
@@ -50,11 +46,12 @@ const HeroTopBar = ({ theme, setTheme }) => {
           ))}
         </div>
         <div className="dots">
-          <span /><span className="active" /><span />
+          <span />
+          <span className="active" />
+          <span />
         </div>
       </div>
 
-      {/* Gear + Day/Night menu – top right */}
       <div className="gear-block">
         <div
           className={`gear-wrap${open ? ' gear-wrap--open' : ''}`}
@@ -82,7 +79,6 @@ const HeroTopBar = ({ theme, setTheme }) => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };

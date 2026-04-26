@@ -1,37 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Code2, Cpu, Database, Gauge, Layers, Minus, Sparkles, User, X } from 'lucide-react';
-import profileImage from '../assets/rahul.png';
+import profileImage from '../../assets/rahul.png';
+import { ABOUT_CONTENT } from './aboutContent';
 
-const EXPERTISE = [
-  {
-    Icon: Layers,
-    title: 'End-to-End Ownership',
-    desc: 'From system design to polished UI, I build complete products that feel reliable in production.',
-  },
-  {
-    Icon: Database,
-    title: 'Backend and Data Thinking',
-    desc: 'I design scalable APIs, thoughtful schemas, and caching strategies that keep apps fast under load.',
-  },
-  {
-    Icon: Gauge,
-    title: 'Performance First',
-    desc: 'I optimize Core Web Vitals, trim bundle size, and profile bottlenecks before they become user pain.',
-  },
-];
-
-const STACK = [
-  'React',
-  'Next.js',
-  'Node.js',
-  'Express',
-  'TypeScript',
-  'MongoDB',
-  'PostgreSQL',
-  'Redis',
-  'Docker',
-  'AWS',
-];
+const ICONS = {
+  Layers,
+  Database,
+  Gauge,
+};
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
@@ -42,6 +18,7 @@ const About = ({ onClose }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState(() => {
     if (typeof window === 'undefined') return { x: 120, y: 90 };
+
     return {
       x: Math.max(20, Math.round(window.innerWidth * 0.14)),
       y: Math.max(20, Math.round(window.innerHeight * 0.08)),
@@ -99,6 +76,18 @@ const About = ({ onClose }) => {
     setIsDragging(true);
   };
 
+  const {
+    windowTitle,
+    intro,
+    expertiseTitle,
+    expertiseItems,
+    mindsetTitle,
+    mindsetPoints,
+    stackTitle,
+    stack,
+    preview,
+  } = ABOUT_CONTENT;
+
   return (
     <div className="about-desktop" aria-live="polite">
       {!isMinimized && (
@@ -108,7 +97,7 @@ const About = ({ onClose }) => {
           style={{ transform: `translate3d(${position.x}px, ${position.y}px, 0)` }}
         >
           <header className="about-window__header" onPointerDown={startDragging}>
-            <h2 className="about-window__title">About Me</h2>
+            <h2 className="about-window__title">{windowTitle}</h2>
             <div className="about-window__actions">
               <button
                 className="window-btn window-btn--min"
@@ -132,26 +121,17 @@ const About = ({ onClose }) => {
           <div className="about-window__body">
             <section className="about-intro">
               <div className="about-intro__copy">
-                <p className="about-intro__eyebrow">FULL STACK DEVELOPER</p>
-                <h3>Building thoughtful products with speed, scale, and clarity.</h3>
-                <p>
-                  I am a Full Stack Developer who enjoys translating messy ideas into clean, reliable web
-                  products. I work comfortably across frontend and backend layers, balancing architecture,
-                  user experience, and delivery speed. My mindset is simple: understand the problem deeply,
-                  ship practical value quickly, then iterate with data and feedback.
-                </p>
-                <p>
-                  I care about writing maintainable code, designing APIs that are easy to evolve, and
-                  creating interfaces that feel smooth even on constrained devices. Whether it is reducing
-                  latency, improving Lighthouse scores, or refactoring legacy modules, I approach problems
-                  with a product lens and an engineering discipline.
-                </p>
+                <p className="about-intro__eyebrow">{intro.role}</p>
+                <h3>{intro.heading}</h3>
+                {intro.paragraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
               </div>
               <div className="about-intro__image-wrap">
                 <img src={profileImage} alt="Rahul Madeshiya" draggable={false} />
                 <div className="about-intro__badge">
                   <Sparkles size={14} />
-                  <span>Performance + UX Focused</span>
+                  <span>{intro.badge}</span>
                 </div>
               </div>
             </section>
@@ -159,35 +139,40 @@ const About = ({ onClose }) => {
             <section className="about-grid">
               <div className="about-card">
                 <h4>
-                  <Code2 size={17} /> Core Expertise
+                  <Code2 size={17} /> {expertiseTitle}
                 </h4>
                 <div className="about-card__items">
-                  {EXPERTISE.map(({ Icon, title, desc }) => (
-                    <article key={title} className="about-expertise-item">
-                      <span className="about-expertise-item__icon"><Icon size={16} /></span>
-                      <div>
-                        <strong>{title}</strong>
-                        <p>{desc}</p>
-                      </div>
-                    </article>
-                  ))}
+                  {expertiseItems.map(({ icon, title, desc }) => {
+                    const Icon = ICONS[icon];
+
+                    return (
+                      <article key={title} className="about-expertise-item">
+                        <span className="about-expertise-item__icon">
+                          <Icon size={16} />
+                        </span>
+                        <div>
+                          <strong>{title}</strong>
+                          <p>{desc}</p>
+                        </div>
+                      </article>
+                    );
+                  })}
                 </div>
               </div>
 
               <div className="about-card">
                 <h4>
-                  <Cpu size={17} /> Engineering Mindset
+                  <Cpu size={17} /> {mindsetTitle}
                 </h4>
                 <ul className="about-mindset-list">
-                  <li>Break complex features into measurable milestones.</li>
-                  <li>Write testable code and monitor what actually happens in production.</li>
-                  <li>Prioritize readability now to prevent tech debt later.</li>
-                  <li>Make decisions with trade-offs, not hype.</li>
+                  {mindsetPoints.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
                 </ul>
 
-                <p className="about-stack-title">Preferred Stack</p>
+                <p className="about-stack-title">{stackTitle}</p>
                 <div className="about-stack-chips">
-                  {STACK.map((item) => (
+                  {stack.map((item) => (
                     <span key={item}>{item}</span>
                   ))}
                 </div>
@@ -205,17 +190,17 @@ const About = ({ onClose }) => {
               className="about-taskbar__item is-active"
               onClick={() => setIsMinimized(false)}
               aria-label="Restore About Me"
-              title="About Me"
+              title={windowTitle}
             >
               <User size={13} />
-              <span>About Me</span>
+              <span>{windowTitle}</span>
             </button>
 
             <div className="about-taskbar__preview" role="dialog" aria-label="About Me preview">
               <div className="about-taskbar__preview-head">
                 <span>
                   <User size={14} />
-                  About Me
+                  {windowTitle}
                 </span>
                 <button
                   type="button"
@@ -235,8 +220,8 @@ const About = ({ onClose }) => {
               >
                 <img src={profileImage} alt="About preview" draggable={false} />
                 <div className="about-taskbar__preview-copy">
-                  <strong>Full Stack Developer</strong>
-                  <p>Building thoughtful products with speed, scale, and clarity.</p>
+                  <strong>{preview.title}</strong>
+                  <p>{preview.subtitle}</p>
                 </div>
               </button>
             </div>

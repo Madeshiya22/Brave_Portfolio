@@ -1,18 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import HeroParticles from '../components/HeroParticles';
-import HeroTopBar    from '../components/HeroTopBar';
-import HeroSearch    from '../components/HeroSearch';
-import HeroTitle     from '../components/HeroTitle';
-import HeroBottomBar from '../components/HeroBottomBar';
-import ContactModal  from '../components/ContactModal';
-import About         from '../components/About';
+import HeroParticles from './components/HeroParticles';
+import HeroTopBar from './components/HeroTopBar';
+import HeroSearch from './components/HeroSearch';
+import HeroTitle from './components/HeroTitle';
+import HeroBottomBar from './components/HeroBottomBar';
+import ContactModal from './components/ContactModal';
+import About from '../about/About';
 
 const Hero = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
-  const [mouse, setMouse]         = useState({ x: 0, y: 0 });
-  const [theme, setTheme]         = useState('night');
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const [theme, setTheme] = useState('night');
   const heroRef = useRef(null);
 
   useEffect(() => {
@@ -20,10 +20,11 @@ const Hero = () => {
       if (!heroRef.current) return;
       const { left, top, width, height } = heroRef.current.getBoundingClientRect();
       setMouse({
-        x: (e.clientX - left) / width  - 0.5,
-        y: (e.clientY - top)  / height - 0.5,
+        x: (e.clientX - left) / width - 0.5,
+        y: (e.clientY - top) / height - 0.5,
       });
     };
+
     window.addEventListener('mousemove', onMove);
     return () => window.removeEventListener('mousemove', onMove);
   }, []);
@@ -44,9 +45,7 @@ const Hero = () => {
       </section>
 
       {modalOpen && <ContactModal onClose={() => setModalOpen(false)} />}
-      {aboutOpen && (
-        <About onClose={() => setAboutOpen(false)} />
-      )}
+      {aboutOpen && <About onClose={() => setAboutOpen(false)} />}
     </>
   );
 };
