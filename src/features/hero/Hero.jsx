@@ -8,7 +8,7 @@ import HeroBottomBar from './components/HeroBottomBar';
 import ContactModal from './components/ContactModal';
 import About from '../about/About';
 
-const Hero = () => {
+const Hero = ({ onOpenProjects }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
@@ -38,10 +38,11 @@ const Hero = () => {
           <HeroSearch
             onOpenAbout={() => setAboutOpen(true)}
             onOpenContact={() => setModalOpen(true)}
+            onOpenProjects={onOpenProjects}
           />
           <HeroTitle mouse={mouse} />
         </div>
-        <HeroBottomBar onOpenModal={() => setModalOpen(true)} />
+        <HeroBottomBar onOpenModal={() => setModalOpen(true)} onOpenProjects={onOpenProjects} />
       </section>
 
       {modalOpen && <ContactModal onClose={() => setModalOpen(false)} />}

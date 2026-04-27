@@ -54,7 +54,7 @@ const getMatches = (value) => {
   return COMMANDS.filter(({ keywords }) => keywords.some((kw) => kw.includes(query) || query.includes(kw)));
 };
 
-const HeroSearch = ({ onOpenAbout, onOpenContact }) => {
+const HeroSearch = ({ onOpenAbout, onOpenContact, onOpenProjects }) => {
   const [typedText, setTypedText] = useState('');
   const [active, setActive] = useState(false);
   const [inputVal, setInputVal] = useState('');
@@ -118,6 +118,7 @@ const HeroSearch = ({ onOpenAbout, onOpenContact }) => {
     handleDeactivate();
     if (id === 'about') onOpenAbout?.();
     if (id === 'contact') onOpenContact?.();
+    if (id === 'projects') onOpenProjects?.();
   };
 
   const handleKey = (event) => {
