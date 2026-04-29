@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Code2, Cpu, Database, Gauge, Layers, Minus, Sparkles, User, X } from 'lucide-react';
-import profileImage from '../../assets/rahul.png';
-import { ABOUT_CONTENT } from './aboutContent';
+import { Code2, Cpu, Database, Gauge, Layers, Minus, Sparkles, X } from 'lucide-react';
+import profileImage from '../../../assets/rahul.png';
+import { ABOUT_CONTENT } from '../utils/aboutContent';
 
 const ICONS = {
   Layers,
@@ -11,10 +11,9 @@ const ICONS = {
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-const About = ({ onClose }) => {
+const About = ({ onClose, onMinimize, isMinimized = false }) => {
   const windowRef = useRef(null);
   const dragOffsetRef = useRef({ x: 0, y: 0 });
-  const [isMinimized, setIsMinimized] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState(() => {
     if (typeof window === 'undefined') return { x: 120, y: 90 };
@@ -76,6 +75,10 @@ const About = ({ onClose }) => {
     setIsDragging(true);
   };
 
+  if (isMinimized) {
+    return null;
+  }
+
   const {
     windowTitle,
     intro,
@@ -85,7 +88,6 @@ const About = ({ onClose }) => {
     mindsetPoints,
     stackTitle,
     stack,
-    preview,
   } = ABOUT_CONTENT;
 
   return (
@@ -103,7 +105,7 @@ const About = ({ onClose }) => {
                 className="window-btn window-btn--min"
                 type="button"
                 aria-label="Minimize About Me"
-                onClick={() => setIsMinimized(true)}
+                onClick={onMinimize}
               >
                 <Minus size={15} />
               </button>
@@ -182,52 +184,6 @@ const About = ({ onClose }) => {
         </article>
       )}
 
-      {isMinimized && (
-        <div className="about-taskbar" role="toolbar" aria-label="Desktop windows">
-          <div className="about-taskbar__slot">
-            <button
-              type="button"
-              className="about-taskbar__item is-active"
-              onClick={() => setIsMinimized(false)}
-              aria-label="Restore About Me"
-              title={windowTitle}
-            >
-              <User size={13} />
-              <span>{windowTitle}</span>
-            </button>
-
-            <div className="about-taskbar__preview" role="dialog" aria-label="About Me preview">
-              <div className="about-taskbar__preview-head">
-                <span>
-                  <User size={14} />
-                  {windowTitle}
-                </span>
-                <button
-                  type="button"
-                  className="about-taskbar__preview-close"
-                  onClick={onClose}
-                  aria-label="Close About Me"
-                >
-                  <X size={14} />
-                </button>
-              </div>
-
-              <button
-                type="button"
-                className="about-taskbar__preview-body"
-                onClick={() => setIsMinimized(false)}
-                aria-label="Open About Me"
-              >
-                <img src={profileImage} alt="About preview" draggable={false} />
-                <div className="about-taskbar__preview-copy">
-                  <strong>{preview.title}</strong>
-                  <p>{preview.subtitle}</p>
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

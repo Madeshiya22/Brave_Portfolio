@@ -1,16 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import HeroParticles from './components/HeroParticles';
-import HeroTopBar from './components/HeroTopBar';
-import HeroSearch from './components/HeroSearch';
-import HeroTitle from './components/HeroTitle';
-import HeroBottomBar from './components/HeroBottomBar';
-import ContactModal from './components/ContactModal';
-import About from '../about/About';
+import HeroParticles from './HeroParticles';
+import HeroTopBar from './HeroTopBar';
+import HeroSearch from './HeroSearch';
+import HeroTitle from './HeroTitle';
+import HeroBottomBar from './HeroBottomBar';
+import ContactModal from './ContactModal';
+import About from '../../about/page/About';
 
-const Hero = ({ onOpenProjects }) => {
+const Hero = ({
+  aboutOpen,
+  aboutMinimized,
+  onOpenAbout,
+  onMinimizeAbout,
+  onRestoreAbout,
+  onCloseAbout,
+  onOpenProjects,
+}) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [aboutOpen, setAboutOpen] = useState(false);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const [theme, setTheme] = useState('night');
   const heroRef = useRef(null);
@@ -36,17 +43,24 @@ const Hero = ({ onOpenProjects }) => {
         <HeroTopBar theme={theme} setTheme={setTheme} />
         <div className="hero__center">
           <HeroSearch
-            onOpenAbout={() => setAboutOpen(true)}
+            onOpenAbout={onOpenAbout}
             onOpenContact={() => setModalOpen(true)}
             onOpenProjects={onOpenProjects}
           />
           <HeroTitle mouse={mouse} />
         </div>
-        <HeroBottomBar onOpenModal={() => setModalOpen(true)} onOpenProjects={onOpenProjects} />
+        <HeroBottomBar onOpenModal={() => setModalOpen(true)} />
       </section>
 
       {modalOpen && <ContactModal onClose={() => setModalOpen(false)} />}
-      {aboutOpen && <About onClose={() => setAboutOpen(false)} />}
+      {aboutOpen && (
+        <About
+          isMinimized={aboutMinimized}
+          onMinimize={onMinimizeAbout}
+          onRestore={onRestoreAbout}
+          onClose={onCloseAbout}
+        />
+      )}
     </>
   );
 };
