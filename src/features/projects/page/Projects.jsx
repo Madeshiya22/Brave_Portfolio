@@ -86,8 +86,7 @@ const Projects = ({ activeSectionId, onSelectSection, onBack, isMinimized = fals
                     return (
                       <article
                         key={section.id}
-                        className={`project-tile project-tile--${section.id}${selectedSectionId === section.id ? ' project-tile--active' : ''}`}
-                      >
+                        className={`project-tile project-tile--${section.id}${selectedSectionId === section.id ? ' project-tile--active' : ''}`} >
                         <button className="project-tile__badge" type="button" onClick={() => handleOpenSection(section.id)}>
                           <Icon size={19} />
                         </button>
@@ -117,7 +116,7 @@ const Projects = ({ activeSectionId, onSelectSection, onBack, isMinimized = fals
                               </div>
                               <img src={previewProject.image} alt={previewProject.title} />
                               <div className="preview-window__cta">
-                                <button type="button" className="preview-cta">Click Me</button>
+                                <span className="preview-cta">Click Me</span>
                               </div>
                             </div>
                           </button>
