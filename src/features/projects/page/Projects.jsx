@@ -19,7 +19,11 @@ const SECTION_TAGS = {
 
 const Projects = ({ activeSectionId, onSelectSection, onBack, isMinimized = false, onMinimize }) => {
   const [selectedSectionId, setSelectedSectionId] = useState(activeSectionId ?? projectSections[0].id);
-  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(() => JSON.parse(sessionStorage.getItem('appState_detailsOpen')) || false);
+
+  React.useEffect(() => {
+    sessionStorage.setItem('appState_detailsOpen', JSON.stringify(detailsOpen));
+  }, [detailsOpen]);
 
   const handleSelectSection = (sectionId) => {
     setSelectedSectionId(sectionId);

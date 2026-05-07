@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FolderOpen, User } from 'lucide-react';
 import useLenis from './hooks/useLenis';
 import Home from './features/home/page/Home';
@@ -10,12 +10,19 @@ import { projectSections } from './data';
 
 function App() {
   useLenis();
-  const [aboutOpen, setAboutOpen] = useState(false);
-  const [aboutMinimized, setAboutMinimized] = useState(false);
-  const [projectsOpen, setProjectsOpen] = useState(false);
-  const [projectsMinimized, setProjectsMinimized] = useState(false);
-  const [dockOrder, setDockOrder] = useState([]);
-  const [activeSection, setActiveSection] = useState('html-css');
+  const [aboutOpen, setAboutOpen] = useState(() => JSON.parse(sessionStorage.getItem('appState_aboutOpen')) || false);
+  const [aboutMinimized, setAboutMinimized] = useState(() => JSON.parse(sessionStorage.getItem('appState_aboutMinimized')) || false);
+  const [projectsOpen, setProjectsOpen] = useState(() => JSON.parse(sessionStorage.getItem('appState_projectsOpen')) || false);
+  const [projectsMinimized, setProjectsMinimized] = useState(() => JSON.parse(sessionStorage.getItem('appState_projectsMinimized')) || false);
+  const [dockOrder, setDockOrder] = useState(() => JSON.parse(sessionStorage.getItem('appState_dockOrder')) || []);
+  const [activeSection, setActiveSection] = useState(() => sessionStorage.getItem('appState_activeSection') || 'html-css');
+
+  useEffect(() => { sessionStorage.setItem('appState_aboutOpen', JSON.stringify(aboutOpen)); }, [aboutOpen]);
+  useEffect(() => { sessionStorage.setItem('appState_aboutMinimized', JSON.stringify(aboutMinimized)); }, [aboutMinimized]);
+  useEffect(() => { sessionStorage.setItem('appState_projectsOpen', JSON.stringify(projectsOpen)); }, [projectsOpen]);
+  useEffect(() => { sessionStorage.setItem('appState_projectsMinimized', JSON.stringify(projectsMinimized)); }, [projectsMinimized]);
+  useEffect(() => { sessionStorage.setItem('appState_dockOrder', JSON.stringify(dockOrder)); }, [dockOrder]);
+  useEffect(() => { sessionStorage.setItem('appState_activeSection', activeSection); }, [activeSection]);
 
   const openAbout = () => {
     setAboutOpen(true);
