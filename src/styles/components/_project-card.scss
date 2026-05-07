@@ -1,0 +1,198 @@
+// project-card.scss 
+.projects-details-overlay {
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: auto; /* Ensure overlay captures clicks */
+  animation: fadeInDetails 0.3s ease-out;
+}
+
+@keyframes fadeInDetails {
+  from { opacity: 0; transform: scale(0.98); filter: blur(4px); }
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+.details-window {
+  background: rgba(5, 5, 5, 0.85); /* Slightly darker backing */
+  backdrop-filter: blur(12px);
+
+  .projects-window__header {
+    justify-content: center;
+    height: 60px;
+    border-bottom: 1px solid rgba(255, 60, 0, 0.15);
+    background: linear-gradient(180deg, rgba(20, 5, 5, 0.8), rgba(5, 2, 2, 0.95));
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+
+  .details-title {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &-text {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(255, 60, 0, 0.5);
+      padding: 0.4rem 1.5rem;
+      background: rgba(255, 50, 0, 0.1);
+      border: 1px solid rgba(255, 50, 0, 0.2);
+      border-radius: 20px;
+    }
+  }
+}
+
+.projects-details-body {
+  padding: 3rem clamp(1rem, 4vw, 4rem) 4rem;
+  overflow-y: auto;
+  align-items: flex-start;
+}
+
+.project-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+  padding-top: 1rem;
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotate-border {
+  0% { --border-angle: 0deg; }
+  100% { --border-angle: 360deg; }
+}
+
+.code-card {
+  background: 
+    linear-gradient(#080b10, #0d1117) padding-box,
+    conic-gradient(
+      from var(--border-angle), 
+      rgba(255, 255, 255, 0.05) 0%, 
+      rgba(255, 255, 255, 0.05) 80%, 
+      rgba(255, 74, 23, 0.5) 100%
+    ) border-box;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  animation: rotate-border 8s linear infinite;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6), 0 0 24px rgba(255, 58, 42, 0.15);
+  }
+
+  &__header {
+    background: #11151c;
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+
+    .mac-dots {
+      display: flex;
+      gap: 7px;
+      margin-right: 1.25rem;
+
+      .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        box-shadow: 0 0 8px rgba(0,0,0,0.5);
+        
+        &--r { background: #ff5f56; }
+        &--y { background: #ffbd2e; }
+        &--g { background: #27c93f; }
+      }
+    }
+
+    .code-card__title {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+  }
+
+  &__content {
+    padding: 1.75rem 1.5rem;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    flex-grow: 1;
+    background: #080b10;
+    
+    pre {
+      margin: 0;
+      color: #c9d1d9;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .keyword { color: #ff7b72; } /* const */
+    .variable { color: #79c0ff; } /* project */
+    .operator { color: #ff7b72; } /* = */
+    .property { color: #d2a8ff; } /* name, tools, etc */
+    .string { color: #a5d6ff; } /* 'Video CMS', etc */
+    .link-string { color: #a5d6ff; text-decoration: none; cursor: pointer; transition: color 0.2s }
+    .link-string:hover { color: #58a6ff; text-decoration: underline; }
+  }
+
+  &__actions {
+    padding: 1.25rem 1.5rem;
+    background: #080b10;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      backdrop-filter: blur(4px);
+
+      svg {
+        color: #ff4a17;
+        transition: transform 0.2s ease;
+      }
+
+      &:hover {
+        background: rgba(255, 74, 23, 0.1);
+        border-color: rgba(255, 74, 23, 0.3);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 0 12px rgba(255, 74, 23, 0.15);
+
+        svg {
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+}

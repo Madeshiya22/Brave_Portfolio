@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Atom, Braces, Code2, Database, Minus, X } from 'lucide-react';
 import { projectSections } from '../../../data';
+import ProjectDetails from './ProjectDetails';
 
 const SECTION_ICONS = {
   'html-css': Code2,
@@ -18,10 +19,16 @@ const SECTION_TAGS = {
 
 const Projects = ({ activeSectionId, onSelectSection, onBack, isMinimized = false, onMinimize }) => {
   const [selectedSectionId, setSelectedSectionId] = useState(activeSectionId ?? projectSections[0].id);
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
-  const handleOpenSection = (sectionId) => {
+  const handleSelectSection = (sectionId) => {
     setSelectedSectionId(sectionId);
     onSelectSection?.(sectionId);
+  };
+
+  const handleOpenSectionDetails = (sectionId) => {
+    handleSelectSection(sectionId);
+    setDetailsOpen(true);
   };
 
   const handleClose = () => {
@@ -30,6 +37,16 @@ const Projects = ({ activeSectionId, onSelectSection, onBack, isMinimized = fals
 
   if (isMinimized) {
     return null;
+  }
+
+  if (detailsOpen) {
+    return (
+      <ProjectDetails 
+        sectionId={selectedSectionId} 
+        onClose={() => setDetailsOpen(false)} 
+        onMinimize={onMinimize} 
+      />
+    );
   }
 
   return (
@@ -87,7 +104,7 @@ const Projects = ({ activeSectionId, onSelectSection, onBack, isMinimized = fals
                       <article
                         key={section.id}
                         className={`project-tile project-tile--${section.id}${selectedSectionId === section.id ? ' project-tile--active' : ''}`} >
-                        <button className="project-tile__badge" type="button" onClick={() => handleOpenSection(section.id)}>
+                        <button className="project-tile__badge" type="button" onClick={() => handleSelectSection(section.id)}>
                           <Icon size={19} />
                         </button>
 
@@ -107,7 +124,7 @@ const Projects = ({ activeSectionId, onSelectSection, onBack, isMinimized = fals
                             </div>
                           </div>
 
-                          <button className="project-tile__preview" type="button" onClick={() => handleOpenSection(section.id)}>
+                          <div className="project-tile__preview" role="button" tabIndex={0} onClick={() => handleOpenSectionDetails(section.id)}>
                             <div className="preview-window">
                               <div className="preview-window__top">
                                 <span className="dot dot--r" />
@@ -119,7 +136,7 @@ const Projects = ({ activeSectionId, onSelectSection, onBack, isMinimized = fals
                                 <span className="preview-cta">Click Me</span>
                               </div>
                             </div>
-                          </button>
+                          </div>
                         </div>
                       </article>
                     );
