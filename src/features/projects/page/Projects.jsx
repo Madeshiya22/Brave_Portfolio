@@ -39,114 +39,104 @@ const Projects = ({ activeSectionId, onSelectSection, onBack, isMinimized = fals
     return null;
   }
 
-  if (detailsOpen) {
-    return (
-      <ProjectDetails 
-        sectionId={selectedSectionId} 
-        onClose={() => setDetailsOpen(false)} 
-        onMinimize={onMinimize} 
-      />
-    );
-  }
-
   return (
     <div className="projects-desktop" aria-live="polite">
-      <section className="projects-page">
-        <div className="projects-page__glow" />
+      {detailsOpen ? (
+        <ProjectDetails 
+          sectionId={selectedSectionId} 
+          onClose={() => setDetailsOpen(false)} 
+          onMinimize={onMinimize} 
+        />
+      ) : (
+        <section className="projects-page">
+          <div className="projects-page__glow" />
 
-        <div className="projects-window">
-          <header className="projects-window__header">
-            <div className="projects-window__actions">
-              <button
-                className="window-btn window-btn--min"
-                type="button"
-                aria-label="Minimize Projects"
-                onClick={onMinimize}
-              >
-                <Minus size={15} />
-              </button>
-              <button
-                className="window-btn window-btn--close"
-                type="button"
-                aria-label="Close Projects"
-                onClick={handleClose}
-              >
-                <X size={15} />
-              </button>
-            </div>
-          </header>
-
-          <div className="projects-window__body" data-lenis-prevent data-lenis-prevent-wheel>
-              <div className="projects-overview">
-                <div className="projects-overview__head">
-                  <div className="projects-overview__number">02</div>
-                  <div className="projects-overview__titlebox">
-                    <h1>PROJECTS</h1>
-                  </div>
-                  <p>
-                    <span aria-hidden="true">▶▶▶</span>
-                    Things I&apos;ve built so far
-                    <span aria-hidden="true">▶▶▶</span>
-                  </p>
-                </div>
-
-                <div className="projects-overview__spine">
-                  <span />
-                </div>
-
-                <div className="projects-overview__grid">
-                  {projectSections.map((section) => {
-                    const Icon = SECTION_ICONS[section.id] ?? Code2;
-                    const chips = SECTION_TAGS[section.id] ?? [];
-                    const previewProject = section.projects[0];
-
-                    return (
-                      <article
-                        key={section.id}
-                        className={`project-tile project-tile--${section.id}${selectedSectionId === section.id ? ' project-tile--active' : ''}`} >
-                        <button className="project-tile__badge" type="button" onClick={() => handleSelectSection(section.id)}>
-                          <Icon size={19} />
-                        </button>
-
-                        <div className="project-tile__corner" aria-hidden>
-                          <Icon size={12} />
-                        </div>
-
-                        <div className="project-tile__content">
-                          <div className="project-tile__copy">
-                            <h2>{section.label}</h2>
-                            <p>{section.description}</p>
-                            <div className="project-tile__mini-rule" />
-                            <div className="project-tile__chips">
-                              {chips.map((chip) => (
-                                <span key={chip}>{chip}</span>
-                              ))}
-                            </div>
-                          </div>
-
-                          <div className="project-tile__preview" role="button" tabIndex={0} onClick={() => handleOpenSectionDetails(section.id)}>
-                            <div className="preview-window">
-                              <div className="preview-window__top">
-                                <span className="dot dot--r" />
-                                <span className="dot dot--y" />
-                                <span className="dot dot--g" />
-                              </div>
-                              <img src={previewProject.image} alt={previewProject.title} />
-                              <div className="preview-window__cta">
-                                <span className="preview-cta">Click Me</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </article>
-                    );
-                  })}
-                </div>
+          <div className="projects-window">
+            <header className="projects-window__header">
+              <div className="projects-window__actions">
+                <button
+                  className="window-btn window-btn--min"
+                  type="button"
+                  aria-label="Minimize Projects"
+                  onClick={onMinimize}
+                >
+                  <Minus size={15} />
+                </button>
+                <button
+                  className="window-btn window-btn--close"
+                  type="button"
+                  aria-label="Close Projects"
+                  onClick={handleClose}
+                >
+                  <X size={15} />
+                </button>
               </div>
-          </div>
-        </div>
-      </section>
+            </header>
 
+            <div className="projects-window__body" data-lenis-prevent data-lenis-prevent-wheel>
+                <div className="projects-overview">
+                  <div className="projects-overview__head">
+                    <div className="projects-overview__number">02</div>
+                    <div className="projects-overview__titlebox">
+                      <h1>PROJECTS</h1>
+                    </div>
+                    <p>
+                      <span aria-hidden="true">▶▶▶</span>
+                      Things I&apos;ve built so far
+                      <span aria-hidden="true">▶▶▶</span>
+                    </p>
+                  </div>
+
+                  <div className="projects-overview__spine">
+                    <span />
+                  </div>
+
+                  <div className="projects-overview__grid">
+                    {projectSections.map((section) => {
+                      const Icon = SECTION_ICONS[section.id] ?? Code2;
+                      const chips = SECTION_TAGS[section.id] ?? [];
+                      const previewProject = section.projects[0];
+
+                      return (
+                        <article
+                          key={section.id}
+                          className={`project-tile project-tile--${section.id}${selectedSectionId === section.id ? ' project-tile--active' : ''}`} >
+
+                          <div className="project-tile__content">
+                            <div className="project-tile__copy">
+                              <h2>{section.label}</h2>
+                              <p>{section.description}</p>
+                              <div className="project-tile__mini-rule" />
+                              <div className="project-tile__chips">
+                                {chips.map((chip) => (
+                                  <span key={chip}>{chip}</span>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="project-tile__preview" role="button" tabIndex={0} onClick={() => handleOpenSectionDetails(section.id)}>
+                              <div className="preview-window">
+                                <div className="preview-window__top">
+                                  <span className="dot dot--r" />
+                                  <span className="dot dot--y" />
+                                  <span className="dot dot--g" />
+                                </div>
+                                <img src={previewProject.image} alt={previewProject.title} />
+                                <div className="preview-window__cta">
+                                  <span className="preview-cta">Click Me</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </div>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 };

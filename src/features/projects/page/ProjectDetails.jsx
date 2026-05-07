@@ -9,7 +9,7 @@ const ProjectDetails = ({ sectionId, onClose, onMinimize }) => {
   if (!section) return null;
 
   return (
-    <div className="projects-desktop projects-details-overlay" aria-live="polite">
+    <>
         <section className="projects-page projects-details-page">
           <div className="projects-page__glow" />
 
@@ -55,7 +55,7 @@ const ProjectDetails = ({ sectionId, onClose, onMinimize }) => {
             </div>
           </div>
         </section>
-      </div>
+      </>
   );
 };
 
