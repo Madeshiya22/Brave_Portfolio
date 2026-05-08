@@ -64,6 +64,7 @@
 }
 
 .projects-window {
+  pointer-events: auto;
   position: relative;
   z-index: 1;
   width: 100vw;
