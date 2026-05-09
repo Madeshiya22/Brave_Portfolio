@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { FolderOpen, User, Code2 } from 'lucide-react';
 import useLenis from './hooks/useLenis';
 import Home from './features/home/page/Home';
 import Projects from './features/projects/page/Projects';
-import Skills from './features/skills/page/Skills';
 import DesktopDock from './features/home/components/DesktopDock';
 import profileImage from './assets/rahul.png';
 import { ABOUT_CONTENT } from './features/about/utils/aboutContent';
 import { projectSections } from './data';
+
+const Skills = lazy(() => import('./features/skills/page/Skills'));
+const preloadSkills = () => {
+  void import('./features/skills/page/Skills');
+};
 
 function App() {
   useLenis();
@@ -75,6 +79,7 @@ function App() {
   };
 
   const openSkills = () => {
+    preloadSkills();
     setSkillsOpen(true);
     setSkillsMinimized(false);
   };
@@ -158,6 +163,7 @@ function App() {
         onCloseAbout={closeAbout}
         onOpenProjects={openProjects}
         onOpenSkills={openSkills}
+        onPrefetchSkills={preloadSkills}
       />
       {projectsOpen && (
         <Projects
@@ -170,11 +176,13 @@ function App() {
         />
       )}
       {skillsOpen && (
-        <Skills
-          onClose={closeSkills}
-          onMinimize={minimizeSkills}
-          isMinimized={skillsMinimized}
-        />
+        <Suspense fallback={null}>
+          <Skills
+            onClose={closeSkills}
+            onMinimize={minimizeSkills}
+            isMinimized={skillsMinimized}
+          />
+        </Suspense>
       )}
       <DesktopDock items={dockItems} />
     </main>

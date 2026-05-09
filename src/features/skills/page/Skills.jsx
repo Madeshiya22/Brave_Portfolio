@@ -144,12 +144,12 @@ const Skills = ({ onClose, onMinimize, isMinimized = false }) => {
 
   const handleMinimize = () => {
     setTransitionState('minimize');
-    window.setTimeout(() => onMinimize?.(), 220);
+    window.setTimeout(() => onMinimize?.(), 110);
   };
 
   const handleClose = () => {
     setTransitionState('close');
-    window.setTimeout(() => onClose?.(), 220);
+    window.setTimeout(() => onClose?.(), 110);
   };
 
   if (isMinimized) {
@@ -189,7 +189,6 @@ const Skills = ({ onClose, onMinimize, isMinimized = false }) => {
           <div className="skills-window__body">
             <section className="skills-header">
               <div className="skills-header__glow" />
-                    '--card-scale': card.id === 'design' ? '0.92' : '1',
               <div className="skills-header__top">
                 <p className="skills-header__subtitle">Future is deployable</p>
                 <div className="skills-header__title-box">

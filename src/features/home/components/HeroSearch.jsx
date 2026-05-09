@@ -54,7 +54,7 @@ const getMatches = (value) => {
   return COMMANDS.filter(({ keywords }) => keywords.some((kw) => kw.includes(query) || query.includes(kw)));
 };
 
-const HeroSearch = ({ onOpenAbout, onOpenContact, onOpenProjects, onOpenSkills }) => {
+const HeroSearch = ({ onOpenAbout, onOpenContact, onOpenProjects, onOpenSkills, onPrefetchSkills }) => {
   const [typedText, setTypedText] = useState('');
   const [active, setActive] = useState(false);
   const [inputVal, setInputVal] = useState('');
@@ -105,6 +105,10 @@ const HeroSearch = ({ onOpenAbout, onOpenContact, onOpenProjects, onOpenSkills }
     setInputVal(value);
     setHighlighted(0);
     setSuggestions(getMatches(value));
+
+    if (value.toLowerCase().includes('skill') || value.toLowerCase().includes('tech') || value.toLowerCase().includes('stack')) {
+      onPrefetchSkills?.();
+    }
   };
 
   const handleDeactivate = () => {
@@ -150,6 +154,7 @@ const HeroSearch = ({ onOpenAbout, onOpenContact, onOpenProjects, onOpenSkills }
   };
 
   const handleActivate = () => {
+    onPrefetchSkills?.();
     setActive(true);
     setTimeout(() => inputRef.current?.focus(), 20);
   };
