@@ -6,7 +6,7 @@ const DesktopDock = ({ items = [] }) => {
 
   return (
     <div className="about-taskbar desktop-dock" role="toolbar" aria-label="Desktop windows">
-      {items.map(({ id, label, icon: Icon, previewTitle, previewSubtitle, previewAlt, image, onRestore, onClose }) => (
+      {items.map(({ id, label, icon: Icon, previewTitle, previewSubtitle, previewAlt, image, previewTone, onRestore, onClose }) => (
         <div className="about-taskbar__slot" key={id}>
           <button
             type="button"
@@ -41,7 +41,14 @@ const DesktopDock = ({ items = [] }) => {
               onClick={onRestore}
               aria-label={`Open ${label}`}
             >
-              {image && <img src={image} alt={previewAlt ?? `${label} preview`} draggable={false} />}
+              {image ? (
+                <img src={image} alt={previewAlt ?? `${label} preview`} draggable={false} />
+              ) : (
+                <div className={`about-taskbar__preview-fallback about-taskbar__preview-fallback--${previewTone ?? 'default'}`}>
+                  <Icon size={28} />
+                  <span>{label}</span>
+                </div>
+              )}
               <div className="about-taskbar__preview-copy">
                 <strong>{previewTitle}</strong>
                 <p>{previewSubtitle}</p>

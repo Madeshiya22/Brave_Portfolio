@@ -424,6 +424,33 @@
   gap: 0.45rem;
   cursor: pointer;
 }
+.about-taskbar__preview-fallback {
+  width: 100%;
+  min-height: 86px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(20, 20, 20, 0.96), rgba(10, 10, 10, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.88);
+  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.03);
+}
+.about-taskbar__preview-fallback--skills {
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 45, 20, 0.18), transparent 50%),
+    linear-gradient(135deg, rgba(12, 10, 10, 0.98), rgba(28, 8, 8, 0.92));
+  border-color: rgba(255, 45, 20, 0.28);
+  box-shadow:
+    inset 0 0 20px rgba(255, 45, 20, 0.08),
+    0 0 22px rgba(255, 45, 20, 0.14);
+}
+.about-taskbar__preview-fallback span {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
 
 .about-taskbar__preview-body img {
   width: 100%;

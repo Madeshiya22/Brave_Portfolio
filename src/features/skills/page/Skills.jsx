@@ -48,7 +48,7 @@ const SKILL_CARDS = [
   },
   {
     id: 'ecosystem',
-    label: 'Developer Ecosystem Tools, Animation',
+    label: 'Developer Ecosystem Tools,\nAnimation',
     skills: [
       { name: 'Docker', desc: 'Containers that carry consistency.', icon: FaDocker, color: '#2496ED' },
       { name: 'AWS', desc: 'Cloud power that fuels innovation.', icon: FaAws, color: '#FF9900' },

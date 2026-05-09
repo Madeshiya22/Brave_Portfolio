@@ -136,7 +136,8 @@ function App() {
           previewTitle: 'My Tech Stack',
           previewSubtitle: 'React, Node, MERN & More',
           previewAlt: 'Skills preview',
-          image: profileImage,
+          image: undefined,
+          previewTone: 'skills',
           onRestore: restoreSkills,
           onClose: closeSkills,
         };
