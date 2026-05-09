@@ -189,6 +189,7 @@ const Skills = ({ onClose, onMinimize, isMinimized = false }) => {
           <div className="skills-window__body">
             <section className="skills-header">
               <div className="skills-header__glow" />
+                    '--card-scale': card.id === 'design' ? '0.92' : '1',
               <div className="skills-header__top">
                 <p className="skills-header__subtitle">Future is deployable</p>
                 <div className="skills-header__title-box">
@@ -206,6 +207,7 @@ const Skills = ({ onClose, onMinimize, isMinimized = false }) => {
                   style={{
                     '--card-rotate': `${card.rotation}deg`,
                     '--card-shift': card.id === 'basics' ? '14px' : card.id === 'mern' ? '2px' : card.id === 'ecosystem' ? '0px' : '16px',
+                    '--card-scale': card.id === 'design' ? '0.94' : '1',
                   }}
                 >
                   <div className="skills-card__holes">

@@ -11,8 +11,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: min(1180px, 95vw);
-  max-height: min(86vh, 800px);
+  width: min(1440px, 92vw);
+  max-height: min(92vh, 860px);
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -112,9 +112,9 @@
 }
 
 .skills-window__body {
-  max-height: calc(min(86vh, 800px) - 48px);
+  max-height: calc(min(92vh, 860px) - 48px);
   overflow: hidden;
-  padding: 0.85rem 1.15rem 0.95rem;
+  padding: 1.05rem 1.28rem 1.05rem;
   background:
     radial-gradient(circle at 50% 24%, rgba(255, 40, 16, 0.12), transparent 26%),
     linear-gradient(180deg, rgba(5, 5, 5, 0.98), rgba(5, 5, 5, 0.97));
@@ -153,7 +153,7 @@
 .skills-header {
   position: relative;
   text-align: center;
-  margin-bottom: 0.78rem;
+  margin-bottom: 1.1rem;
 }
 
 .skills-header::before {
@@ -174,8 +174,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300px;
-  height: 170px;
+  width: 310px;
+  height: 180px;
   background: radial-gradient(circle, rgba(255, 45, 20, 0.16), rgba(255, 45, 20, 0.06) 52%, transparent 76%);
   filter: blur(12px);
   pointer-events: none;
@@ -187,7 +187,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.24rem;
+  gap: 0.22rem;
 }
 
 .skills-header__subtitle,
@@ -202,7 +202,7 @@
 
 .skills-header__title-box {
   position: relative;
-  padding: 0.45rem 1.08rem;
+  padding: 0.42rem 1rem;
   background: rgba(10, 10, 10, 0.42);
   border: 1px solid rgba(255, 45, 20, 0.18);
   border-radius: 8px;
@@ -213,7 +213,7 @@
 
 .skills-header__title {
   margin: 0;
-  font-size: clamp(1.62rem, 3.5vw, 2.3rem);
+  font-size: clamp(1.62rem, 3.45vw, 2.28rem);
   font-weight: 900;
   color: #ff2f20;
   letter-spacing: 0.095em;
@@ -226,7 +226,7 @@
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.64rem;
+  gap: 0.82rem;
   perspective: 1200px;
 }
 
@@ -234,8 +234,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 246px;
-  padding: 0.58rem 0.74rem 0.66rem;
+  min-height: 272px;
+  padding: 0.7rem 0.85rem 0.76rem;
   border-radius: 11px;
   overflow: hidden;
   background:
@@ -247,7 +247,7 @@
     0 12px 30px rgba(0, 0, 0, 0.44),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
   transform-origin: center center;
-  transform: translateY(var(--card-shift, 0px)) rotate(var(--card-rotate, 0deg));
+  transform: translateY(var(--card-shift, 0px)) rotate(var(--card-rotate, 0deg)) scale(var(--card-scale, 1));
   transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.32s ease, border-color 0.32s ease;
 }
 
@@ -261,7 +261,7 @@
 }
 
 .skills-card:hover {
-  transform: translateY(calc(var(--card-shift, 0px) - 6px)) rotate(var(--card-rotate, 0deg)) !important;
+  transform: translateY(calc(var(--card-shift, 0px) - 6px)) rotate(var(--card-rotate, 0deg)) scale(var(--card-scale, 1)) !important;
   border-color: rgba(255, 45, 20, 0.22);
   box-shadow:
     0 18px 42px rgba(0, 0, 0, 0.56),
@@ -272,13 +272,13 @@
 .skills-card__holes {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  gap: 0.18rem;
+  gap: 0.16rem;
   margin-bottom: 0.48rem;
 }
 
 .skills-card__hole {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   justify-self: center;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.82);
@@ -290,13 +290,13 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 0.58rem;
-  padding: 0.02rem 0 0.36rem;
+  gap: 0.7rem;
+  padding: 0.02rem 0 0.38rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .skills-card__brand {
-  font-size: clamp(0.96rem, 1.7vw, 1.22rem);
+  font-size: clamp(0.96rem, 1.6vw, 1.16rem);
   font-weight: 800;
   color: #ff3a2a;
   line-height: 1;
@@ -306,8 +306,9 @@
 .skills-card__label {
   flex: 1;
   padding-top: 0.02rem;
-  font-size: clamp(0.74rem, 1.2vw, 0.88rem);
-  line-height: 1.14;
+  font-size: clamp(0.74rem, 1.12vw, 0.88rem);
+  line-height: 1.16;
+  letter-spacing: 0.01em;
   color: rgba(255, 255, 255, 0.88);
   text-align: right;
   white-space: pre-line;
@@ -317,20 +318,20 @@
   position: relative;
   z-index: 1;
   flex: 1;
-  padding-top: 0.48rem;
+  padding-top: 0.5rem;
 }
 
 .skills-card__items {
   display: flex;
   flex-direction: column;
-  gap: 0.46rem;
+  gap: 0.5rem;
 }
 
 .skill-item {
   display: flex;
   align-items: flex-start;
-  gap: 0.55rem;
-  padding: 0.08rem 0 0.28rem;
+  gap: 0.7rem;
+  padding: 0.06rem 0 0.3rem;
 }
 
 .skill-item:not(:last-child) {
@@ -342,8 +343,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 1.72rem;
-  min-height: 1.72rem;
+  width: 1.8rem;
+  min-height: 1.8rem;
   filter: drop-shadow(0 0 4px rgba(255, 45, 20, 0.14));
 }
 
@@ -354,15 +355,15 @@
 .skill-item__name {
   display: block;
   margin: 0 0 0.18rem;
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   font-weight: 700;
   color: #ff3f29;
 }
 
 .skill-item__desc {
   margin: 0;
-  font-size: 0.64rem;
-  line-height: 1.2;
+  font-size: 0.66rem;
+  line-height: 1.28;
   color: rgba(255, 255, 255, 0.76);
 }
 
@@ -447,11 +448,11 @@
 @media (max-width: 1240px) {
   .skills-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.74rem;
+    gap: 0.8rem;
   }
 
   .skills-card {
-    min-height: 236px;
+    min-height: 258px;
   }
 }
 
