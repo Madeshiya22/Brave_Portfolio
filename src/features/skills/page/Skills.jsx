@@ -204,7 +204,8 @@ const Skills = ({ onClose, onMinimize, isMinimized = false }) => {
                   key={card.id}
                   className="skills-card"
                   style={{
-                    transform: `rotate(${card.rotation}deg)`,
+                    '--card-rotate': `${card.rotation}deg`,
+                    '--card-shift': card.id === 'basics' ? '14px' : card.id === 'mern' ? '2px' : card.id === 'ecosystem' ? '0px' : '16px',
                   }}
                 >
                   <div className="skills-card__holes">
