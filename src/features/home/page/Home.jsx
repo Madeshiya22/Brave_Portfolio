@@ -9,6 +9,7 @@ const Home = ({
   onRestoreAbout,
   onCloseAbout,
   onOpenProjects,
+  onOpenSkills,
 }) => {
   return (
     <Hero
@@ -19,6 +20,7 @@ const Home = ({
       onRestoreAbout={onRestoreAbout}
       onCloseAbout={onCloseAbout}
       onOpenProjects={onOpenProjects}
+      onOpenSkills={onOpenSkills}
     />
   );
 };

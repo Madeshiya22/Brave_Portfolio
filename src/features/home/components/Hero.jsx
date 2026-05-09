@@ -16,6 +16,7 @@ const Hero = ({
   onRestoreAbout,
   onCloseAbout,
   onOpenProjects,
+  onOpenSkills,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
@@ -46,6 +47,7 @@ const Hero = ({
             onOpenAbout={onOpenAbout}
             onOpenContact={() => setModalOpen(true)}
             onOpenProjects={onOpenProjects}
+            onOpenSkills={onOpenSkills}
           />
           <HeroTitle mouse={mouse} />
         </div>

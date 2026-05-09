@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { FolderOpen, User } from 'lucide-react';
+import { FolderOpen, User, Code2 } from 'lucide-react';
 import useLenis from './hooks/useLenis';
 import Home from './features/home/page/Home';
 import Projects from './features/projects/page/Projects';
+import Skills from './features/skills/page/Skills';
 import DesktopDock from './features/home/components/DesktopDock';
 import profileImage from './assets/rahul.png';
 import { ABOUT_CONTENT } from './features/about/utils/aboutContent';
@@ -14,6 +15,8 @@ function App() {
   const [aboutMinimized, setAboutMinimized] = useState(() => JSON.parse(sessionStorage.getItem('appState_aboutMinimized')) || false);
   const [projectsOpen, setProjectsOpen] = useState(() => JSON.parse(sessionStorage.getItem('appState_projectsOpen')) || false);
   const [projectsMinimized, setProjectsMinimized] = useState(() => JSON.parse(sessionStorage.getItem('appState_projectsMinimized')) || false);
+  const [skillsOpen, setSkillsOpen] = useState(() => JSON.parse(sessionStorage.getItem('appState_skillsOpen')) || false);
+  const [skillsMinimized, setSkillsMinimized] = useState(() => JSON.parse(sessionStorage.getItem('appState_skillsMinimized')) || false);
   const [dockOrder, setDockOrder] = useState(() => JSON.parse(sessionStorage.getItem('appState_dockOrder')) || []);
   const [activeSection, setActiveSection] = useState(() => sessionStorage.getItem('appState_activeSection') || 'html-css');
 
@@ -21,6 +24,8 @@ function App() {
   useEffect(() => { sessionStorage.setItem('appState_aboutMinimized', JSON.stringify(aboutMinimized)); }, [aboutMinimized]);
   useEffect(() => { sessionStorage.setItem('appState_projectsOpen', JSON.stringify(projectsOpen)); }, [projectsOpen]);
   useEffect(() => { sessionStorage.setItem('appState_projectsMinimized', JSON.stringify(projectsMinimized)); }, [projectsMinimized]);
+  useEffect(() => { sessionStorage.setItem('appState_skillsOpen', JSON.stringify(skillsOpen)); }, [skillsOpen]);
+  useEffect(() => { sessionStorage.setItem('appState_skillsMinimized', JSON.stringify(skillsMinimized)); }, [skillsMinimized]);
   useEffect(() => { sessionStorage.setItem('appState_dockOrder', JSON.stringify(dockOrder)); }, [dockOrder]);
   useEffect(() => { sessionStorage.setItem('appState_activeSection', activeSection); }, [activeSection]);
 
@@ -69,6 +74,28 @@ function App() {
     setDockOrder((current) => current.filter((item) => item !== 'projects'));
   };
 
+  const openSkills = () => {
+    setSkillsOpen(true);
+    setSkillsMinimized(false);
+  };
+
+  const minimizeSkills = () => {
+    setSkillsMinimized(true);
+    setDockOrder((current) => (current.includes('skills') ? current : [...current, 'skills']));
+  };
+
+  const restoreSkills = () => {
+    setSkillsOpen(true);
+    setSkillsMinimized(false);
+    setDockOrder((current) => current.filter((item) => item !== 'skills'));
+  };
+
+  const closeSkills = () => {
+    setSkillsOpen(false);
+    setSkillsMinimized(false);
+    setDockOrder((current) => current.filter((item) => item !== 'skills'));
+  };
+
   const activeProjectSection = projectSections.find((section) => section.id === activeSection) ?? projectSections[0];
 
   const dockItems = dockOrder
@@ -101,6 +128,20 @@ function App() {
         };
       }
 
+      if (itemId === 'skills' && skillsOpen && skillsMinimized) {
+        return {
+          id: 'skills',
+          label: 'Skills',
+          icon: Code2,
+          previewTitle: 'My Tech Stack',
+          previewSubtitle: 'React, Node, MERN & More',
+          previewAlt: 'Skills preview',
+          image: profileImage,
+          onRestore: restoreSkills,
+          onClose: closeSkills,
+        };
+      }
+
       return null;
     })
     .filter(Boolean);
@@ -115,6 +156,7 @@ function App() {
         onRestoreAbout={restoreAbout}
         onCloseAbout={closeAbout}
         onOpenProjects={openProjects}
+        onOpenSkills={openSkills}
       />
       {projectsOpen && (
         <Projects
@@ -124,6 +166,13 @@ function App() {
           isMinimized={projectsMinimized}
           onMinimize={minimizeProjects}
           fullPage={true}
+        />
+      )}
+      {skillsOpen && (
+        <Skills
+          onClose={closeSkills}
+          onMinimize={minimizeSkills}
+          isMinimized={skillsMinimized}
         />
       )}
       <DesktopDock items={dockItems} />
