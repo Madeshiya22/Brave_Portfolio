@@ -1,0 +1,164 @@
+// ══════════════════════════════════════════════════════════════
+//  cursor.scss  — Global Custom Cursor System
+//  Matches portfolio dark/red futuristic theme
+// ══════════════════════════════════════════════════════════════
+
+// ── Custom Cursor Elements ─────────────────────────────────────
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 999999;
+  will-change: transform;
+}
+
+.custom-cursor__ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 12px 2px rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+  will-change: transform;
+  // xPercent/yPercent set via GSAP — keeps it centered on pointer
+}
+
+.custom-cursor__dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+  will-change: transform;
+}
+
+// ── Cursor Toggle Button ───────────────────────────────────────
+
+.cursor-toggle {
+  position: relative;
+  cursor: pointer;
+}
+
+.cursor-toggle__btn {
+  position: relative;
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  padding: 0;
+
+  &:hover,
+  .cursor-toggle--open & {
+    color: rgba(255, 255, 255, 0.95);
+    transform: scale(1.12) rotate(-8deg);
+  }
+}
+
+// ── Dropdown Menu ──────────────────────────────────────────────
+
+.cursor-menu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  min-width: 158px;
+  padding: 0.55rem 0.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(
+    145deg,
+    rgba(14, 14, 16, 0.88),
+    rgba(6, 6, 6, 0.94)
+  );
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 0 20px rgba(255, 45, 20, 0.06);
+
+  // Hidden by default — revealed on hover
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px) scale(0.97);
+  transform-origin: top right;
+  pointer-events: none;
+  transition:
+    opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.28s;
+
+  .cursor-toggle--open & {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+}
+
+.cursor-menu__label {
+  margin: 0 0 0.4rem 0.55rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.cursor-menu__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.48rem 0.6rem;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  &.is-active {
+    color: #ff3a2a;
+
+    .cursor-menu__dot {
+      background: #ff3a2a;
+      box-shadow: 0 0 8px 2px rgba(255, 45, 20, 0.5);
+    }
+  }
+}
+
+.cursor-menu__dot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.18s ease, box-shadow 0.18s ease;
+}

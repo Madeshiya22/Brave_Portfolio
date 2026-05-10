@@ -7,6 +7,8 @@ import DesktopDock from './features/home/components/DesktopDock';
 import profileImage from './assets/rahul.png';
 import { ABOUT_CONTENT } from './features/about/utils/aboutContent';
 import { projectSections } from './data';
+import { CursorProvider } from './context/CursorContext';
+import CustomCursor from './components/Cursor/CustomCursor';
 
 const Skills = lazy(() => import('./features/skills/page/Skills'));
 const preloadSkills = () => {
@@ -153,39 +155,42 @@ function App() {
     .filter(Boolean);
 
   return (
-    <main className="app-container">
-      <Home
-        aboutOpen={aboutOpen}
-        aboutMinimized={aboutMinimized}
-        onOpenAbout={openAbout}
-        onMinimizeAbout={minimizeAbout}
-        onRestoreAbout={restoreAbout}
-        onCloseAbout={closeAbout}
-        onOpenProjects={openProjects}
-        onOpenSkills={openSkills}
-        onPrefetchSkills={preloadSkills}
-      />
-      {projectsOpen && (
-        <Projects
-          activeSectionId={activeSection}
-          onSelectSection={setActiveSection}
-          onBack={closeProjects}
-          isMinimized={projectsMinimized}
-          onMinimize={minimizeProjects}
-          fullPage={true}
+    <CursorProvider>
+      <CustomCursor />
+      <main className="app-container">
+        <Home
+          aboutOpen={aboutOpen}
+          aboutMinimized={aboutMinimized}
+          onOpenAbout={openAbout}
+          onMinimizeAbout={minimizeAbout}
+          onRestoreAbout={restoreAbout}
+          onCloseAbout={closeAbout}
+          onOpenProjects={openProjects}
+          onOpenSkills={openSkills}
+          onPrefetchSkills={preloadSkills}
         />
-      )}
-      {skillsOpen && (
-        <Suspense fallback={null}>
-          <Skills
-            onClose={closeSkills}
-            onMinimize={minimizeSkills}
-            isMinimized={skillsMinimized}
+        {projectsOpen && (
+          <Projects
+            activeSectionId={activeSection}
+            onSelectSection={setActiveSection}
+            onBack={closeProjects}
+            isMinimized={projectsMinimized}
+            onMinimize={minimizeProjects}
+            fullPage={true}
           />
-        </Suspense>
-      )}
-      <DesktopDock items={dockItems} />
-    </main>
+        )}
+        {skillsOpen && (
+          <Suspense fallback={null}>
+            <Skills
+              onClose={closeSkills}
+              onMinimize={minimizeSkills}
+              isMinimized={skillsMinimized}
+            />
+          </Suspense>
+        )}
+        <DesktopDock items={dockItems} />
+      </main>
+    </CursorProvider>
   );
 }
 

@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Settings, Sun, Moon } from 'lucide-react';
 import { FaInstagram, FaLinkedin, FaGithub, FaWhatsapp } from 'react-icons/fa';
 import Clock from './Clock';
+import CursorToggle from '../../../components/Cursor/CursorToggle';
 
 const SOCIAL_LINKS = [
   { href: '#', cls: 'icon-btn--instagram', Icon: FaInstagram, label: 'Instagram' },
@@ -12,16 +13,19 @@ const SOCIAL_LINKS = [
 
 const HeroTopBar = ({ theme, setTheme }) => {
   const [open, setOpen] = useState(false);
-  const closeTimer = useRef(null);
+  const gearRef = useRef(null);
 
-  const handleEnter = () => {
-    clearTimeout(closeTimer.current);
-    setOpen(true);
-  };
-
-  const handleLeave = () => {
-    closeTimer.current = setTimeout(() => setOpen(false), 250);
-  };
+  // Close when clicking outside the gear block
+  useEffect(() => {
+    if (!open) return;
+    const handleOutside = (e) => {
+      if (gearRef.current && !gearRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, [open]);
 
   return (
     <div className="hero__top anim-fade-down">
@@ -52,18 +56,18 @@ const HeroTopBar = ({ theme, setTheme }) => {
         </div>
       </div>
 
-      <div className="gear-block">
+      <div className="gear-block" ref={gearRef}>
+        {/* Settings gear — click to open/close */}
         <div
           className={`gear-wrap${open ? ' gear-wrap--open' : ''}`}
-          onMouseEnter={handleEnter}
-          onMouseLeave={handleLeave}
+          onClick={() => setOpen((prev) => !prev)}
         >
           <Settings size={26} className="gear-icon" />
 
           <div className="theme-menu">
             <button
               className={`theme-btn theme-btn--day${theme === 'day' ? ' is-active' : ''}`}
-              onClick={() => setTheme('day')}
+              onClick={(e) => { e.stopPropagation(); setTheme('day'); setOpen(false); }}
             >
               <Sun size={15} />
               <span>Day</span>
@@ -71,13 +75,16 @@ const HeroTopBar = ({ theme, setTheme }) => {
 
             <button
               className={`theme-btn theme-btn--night${theme === 'night' ? ' is-active' : ''}`}
-              onClick={() => setTheme('night')}
+              onClick={(e) => { e.stopPropagation(); setTheme('night'); setOpen(false); }}
             >
               <Moon size={15} />
               <span>Night</span>
             </button>
           </div>
         </div>
+
+        {/* Cursor toggle — sits directly below gear icon */}
+        <CursorToggle />
       </div>
     </div>
   );
