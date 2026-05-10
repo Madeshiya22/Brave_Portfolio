@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { User, Mail, FolderOpen, Code2, Home } from 'lucide-react';
+import { User, Mail, FolderOpen, Code2, Home, BookOpen } from 'lucide-react';
 
 const PHRASES = [
   'Ask anything, find anything...',
@@ -39,6 +39,13 @@ const COMMANDS = [
     hint: 'My tech stack',
   },
   {
+    id: 'education',
+    keywords: ['education', 'study', 'college', 'degree', 'btech', 'learn', 'academic'],
+    label: 'Education',
+    Icon: BookOpen,
+    hint: 'My academic journey',
+  },
+  {
     id: 'home',
     keywords: ['home', 'back', 'start'],
     label: 'Home',
@@ -54,7 +61,7 @@ const getMatches = (value) => {
   return COMMANDS.filter(({ keywords }) => keywords.some((kw) => kw.includes(query) || query.includes(kw)));
 };
 
-const HeroSearch = ({ onOpenAbout, onOpenContact, onOpenProjects, onOpenSkills, onPrefetchSkills }) => {
+const HeroSearch = ({ onOpenAbout, onOpenContact, onOpenProjects, onOpenSkills, onPrefetchSkills, onOpenEducation }) => {
   const [typedText, setTypedText] = useState('');
   const [active, setActive] = useState(false);
   const [inputVal, setInputVal] = useState('');
@@ -120,10 +127,11 @@ const HeroSearch = ({ onOpenAbout, onOpenContact, onOpenProjects, onOpenSkills, 
 
   const runCommand = (id) => {
     handleDeactivate();
-    if (id === 'about') onOpenAbout?.();
-    if (id === 'contact') onOpenContact?.();
-    if (id === 'projects') onOpenProjects?.();
-    if (id === 'skills') onOpenSkills?.();
+    if (id === 'about')     onOpenAbout?.();
+    if (id === 'contact')   onOpenContact?.();
+    if (id === 'projects')  onOpenProjects?.();
+    if (id === 'skills')    onOpenSkills?.();
+    if (id === 'education') onOpenEducation?.();
   };
 
   const handleKey = (event) => {

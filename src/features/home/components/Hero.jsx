@@ -18,6 +18,7 @@ const Hero = ({
   onOpenProjects,
   onOpenSkills,
   onPrefetchSkills,
+  onOpenEducation,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
@@ -50,6 +51,7 @@ const Hero = ({
             onOpenProjects={onOpenProjects}
             onOpenSkills={onOpenSkills}
             onPrefetchSkills={onPrefetchSkills}
+            onOpenEducation={onOpenEducation}
           />
           <HeroTitle mouse={mouse} />
         </div>

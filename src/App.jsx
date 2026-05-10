@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { FolderOpen, User, Code2 } from 'lucide-react';
+import { FolderOpen, User, Code2, BookOpen } from 'lucide-react';
 import useLenis from './hooks/useLenis';
 import Home from './features/home/page/Home';
 import Projects from './features/projects/page/Projects';
@@ -10,30 +10,35 @@ import { projectSections } from './data';
 import { CursorProvider } from './context/CursorContext';
 import CustomCursor from './components/Cursor/CustomCursor';
 
-const Skills = lazy(() => import('./features/skills/page/Skills'));
-const preloadSkills = () => {
-  void import('./features/skills/page/Skills');
-};
+const Skills    = lazy(() => import('./features/skills/page/Skills'));
+const Education = lazy(() => import('./features/education/page/Education'));
+
+const preloadSkills = () => { void import('./features/skills/page/Skills'); };
+const preloadEdu    = () => { void import('./features/education/page/Education'); };
 
 function App() {
   useLenis();
-  const [aboutOpen, setAboutOpen] = useState(() => JSON.parse(sessionStorage.getItem('appState_aboutOpen')) || false);
+  const [aboutOpen, setAboutOpen]           = useState(() => JSON.parse(sessionStorage.getItem('appState_aboutOpen'))      || false);
   const [aboutMinimized, setAboutMinimized] = useState(() => JSON.parse(sessionStorage.getItem('appState_aboutMinimized')) || false);
-  const [projectsOpen, setProjectsOpen] = useState(() => JSON.parse(sessionStorage.getItem('appState_projectsOpen')) || false);
+  const [projectsOpen, setProjectsOpen]     = useState(() => JSON.parse(sessionStorage.getItem('appState_projectsOpen'))   || false);
   const [projectsMinimized, setProjectsMinimized] = useState(() => JSON.parse(sessionStorage.getItem('appState_projectsMinimized')) || false);
-  const [skillsOpen, setSkillsOpen] = useState(() => JSON.parse(sessionStorage.getItem('appState_skillsOpen')) || false);
+  const [skillsOpen, setSkillsOpen]         = useState(() => JSON.parse(sessionStorage.getItem('appState_skillsOpen'))     || false);
   const [skillsMinimized, setSkillsMinimized] = useState(() => JSON.parse(sessionStorage.getItem('appState_skillsMinimized')) || false);
-  const [dockOrder, setDockOrder] = useState(() => JSON.parse(sessionStorage.getItem('appState_dockOrder')) || []);
-  const [activeSection, setActiveSection] = useState(() => sessionStorage.getItem('appState_activeSection') || 'html-css');
+  const [eduOpen, setEduOpen]               = useState(() => JSON.parse(sessionStorage.getItem('appState_eduOpen'))        || false);
+  const [eduMinimized, setEduMinimized]     = useState(() => JSON.parse(sessionStorage.getItem('appState_eduMinimized'))   || false);
+  const [dockOrder, setDockOrder]           = useState(() => JSON.parse(sessionStorage.getItem('appState_dockOrder'))      || []);
+  const [activeSection, setActiveSection]   = useState(() => sessionStorage.getItem('appState_activeSection') || 'html-css');
 
-  useEffect(() => { sessionStorage.setItem('appState_aboutOpen', JSON.stringify(aboutOpen)); }, [aboutOpen]);
-  useEffect(() => { sessionStorage.setItem('appState_aboutMinimized', JSON.stringify(aboutMinimized)); }, [aboutMinimized]);
-  useEffect(() => { sessionStorage.setItem('appState_projectsOpen', JSON.stringify(projectsOpen)); }, [projectsOpen]);
-  useEffect(() => { sessionStorage.setItem('appState_projectsMinimized', JSON.stringify(projectsMinimized)); }, [projectsMinimized]);
-  useEffect(() => { sessionStorage.setItem('appState_skillsOpen', JSON.stringify(skillsOpen)); }, [skillsOpen]);
-  useEffect(() => { sessionStorage.setItem('appState_skillsMinimized', JSON.stringify(skillsMinimized)); }, [skillsMinimized]);
-  useEffect(() => { sessionStorage.setItem('appState_dockOrder', JSON.stringify(dockOrder)); }, [dockOrder]);
-  useEffect(() => { sessionStorage.setItem('appState_activeSection', activeSection); }, [activeSection]);
+  useEffect(() => { sessionStorage.setItem('appState_aboutOpen',        JSON.stringify(aboutOpen));        }, [aboutOpen]);
+  useEffect(() => { sessionStorage.setItem('appState_aboutMinimized',   JSON.stringify(aboutMinimized));   }, [aboutMinimized]);
+  useEffect(() => { sessionStorage.setItem('appState_projectsOpen',     JSON.stringify(projectsOpen));     }, [projectsOpen]);
+  useEffect(() => { sessionStorage.setItem('appState_projectsMinimized',JSON.stringify(projectsMinimized));}, [projectsMinimized]);
+  useEffect(() => { sessionStorage.setItem('appState_skillsOpen',       JSON.stringify(skillsOpen));       }, [skillsOpen]);
+  useEffect(() => { sessionStorage.setItem('appState_skillsMinimized',  JSON.stringify(skillsMinimized));  }, [skillsMinimized]);
+  useEffect(() => { sessionStorage.setItem('appState_eduOpen',          JSON.stringify(eduOpen));          }, [eduOpen]);
+  useEffect(() => { sessionStorage.setItem('appState_eduMinimized',     JSON.stringify(eduMinimized));     }, [eduMinimized]);
+  useEffect(() => { sessionStorage.setItem('appState_dockOrder',        JSON.stringify(dockOrder));        }, [dockOrder]);
+  useEffect(() => { sessionStorage.setItem('appState_activeSection',    activeSection);                    }, [activeSection]);
 
   const openAbout = () => {
     setAboutOpen(true);
@@ -103,6 +108,29 @@ function App() {
     setDockOrder((current) => current.filter((item) => item !== 'skills'));
   };
 
+  const openEducation = () => {
+    preloadEdu();
+    setEduOpen(true);
+    setEduMinimized(false);
+  };
+
+  const minimizeEducation = () => {
+    setEduMinimized(true);
+    setDockOrder((current) => (current.includes('education') ? current : [...current, 'education']));
+  };
+
+  const restoreEducation = () => {
+    setEduOpen(true);
+    setEduMinimized(false);
+    setDockOrder((current) => current.filter((item) => item !== 'education'));
+  };
+
+  const closeEducation = () => {
+    setEduOpen(false);
+    setEduMinimized(false);
+    setDockOrder((current) => current.filter((item) => item !== 'education'));
+  };
+
   const activeProjectSection = projectSections.find((section) => section.id === activeSection) ?? projectSections[0];
 
   const dockItems = dockOrder
@@ -150,6 +178,21 @@ function App() {
         };
       }
 
+      if (itemId === 'education' && eduOpen && eduMinimized) {
+        return {
+          id: 'education',
+          label: 'Education',
+          icon: BookOpen,
+          previewTitle: 'My Academic Journey',
+          previewSubtitle: 'CEC • ThinkNext • Sheryians',
+          previewAlt: 'Education preview',
+          image: undefined,
+          previewTone: 'education',
+          onRestore: restoreEducation,
+          onClose: closeEducation,
+        };
+      }
+
       return null;
     })
     .filter(Boolean);
@@ -168,6 +211,7 @@ function App() {
           onOpenProjects={openProjects}
           onOpenSkills={openSkills}
           onPrefetchSkills={preloadSkills}
+          onOpenEducation={openEducation}
         />
         {projectsOpen && (
           <Projects
@@ -185,6 +229,15 @@ function App() {
               onClose={closeSkills}
               onMinimize={minimizeSkills}
               isMinimized={skillsMinimized}
+            />
+          </Suspense>
+        )}
+        {eduOpen && (
+          <Suspense fallback={null}>
+            <Education
+              onClose={closeEducation}
+              onMinimize={minimizeEducation}
+              isMinimized={eduMinimized}
             />
           </Suspense>
         )}

@@ -1,0 +1,511 @@
+@use './variables' as *;
+
+// ══════════════════════════════════════════════════════════════
+//  Education.scss  — Futuristic desktop-window Education section
+//  Matches reference image: dark, orange neon, premium, cinematic
+// ══════════════════════════════════════════════════════════════
+
+// ── Desktop overlay ────────────────────────────────────────────
+.edu-desktop {
+  position: fixed;
+  inset: 0;
+  z-index: 241;
+  pointer-events: none;
+
+  // Cinematic backdrop — dims & softly blurs the main page behind
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.46);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    animation: eduBackdropIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+// ── Window container ───────────────────────────────────────────
+.edu-window {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 30% 60%, rgba(255, 85, 0, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 10%, rgba(255, 85, 0, 0.04) 0%, transparent 40%),
+    linear-gradient(160deg, rgba(14, 14, 14, 0.97), rgba(6, 6, 6, 0.99));
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  pointer-events: auto;
+  will-change: transform, opacity, scale, translate;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  animation: none;
+
+  // particle texture overlay
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 18% 22%, rgba(255, 85, 0, 0.1) 0, transparent 1.5px),
+      radial-gradient(circle at 44% 8%,  rgba(255, 85, 0, 0.08) 0, transparent 1.2px),
+      radial-gradient(circle at 72% 35%, rgba(255, 85, 0, 0.07) 0, transparent 1.4px),
+      radial-gradient(circle at 85% 72%, rgba(255, 85, 0, 0.09) 0, transparent 1.3px),
+      radial-gradient(circle at 26% 80%, rgba(255, 85, 0, 0.08) 0, transparent 1.5px),
+      radial-gradient(circle at 60% 90%, rgba(255, 85, 0, 0.06) 0, transparent 1.2px);
+    pointer-events: none;
+    animation: eduDust 18s ease-in-out infinite;
+    opacity: 0.6;
+  }
+}
+
+// ── Animation states ───────────────────────────────────────────
+.edu-window--enter   { animation: eduWinIn      0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.edu-window--restore { animation: eduWinRestore  0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.edu-window--minimize{ animation: eduWinMinimize 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.edu-window--close   { animation: eduWinClose    0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+.edu-window.is-dragging { user-select: none; }
+
+// ── Title bar ──────────────────────────────────────────────────
+.edu-window__header {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.8rem 0 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent);
+  cursor: grab;
+  position: relative;
+  z-index: 2;
+}
+
+.edu-window.is-dragging .edu-window__header { cursor: grabbing; }
+
+.edu-window__title {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.04em;
+}
+
+.edu-window__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+// ── Body ───────────────────────────────────────────────────────
+.edu-window__body {
+  height: calc(100vh - 48px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 2vh 4vw 2vh;
+  position: relative;
+  z-index: 1;
+}
+
+// ── Hero title (pentagon/hexagon label matching reference) ──────
+.edu-hero-title {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3vh;
+}
+
+.edu-hero-title__box {
+  position: relative;
+  padding: 0.75rem 4rem;
+
+  // Futuristic clipped-corner frame instead of plain rect
+  background: linear-gradient(135deg, rgba(12, 12, 12, 0.82), rgba(4, 4, 4, 0.9));
+  clip-path: polygon(
+    18px 0%,            // top-left cut
+    calc(100% - 18px) 0%,
+    100% 18px,          // top-right cut
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%, // bottom-right cut
+    18px 100%,
+    0% calc(100% - 18px),   // bottom-left cut
+    0% 18px
+  );
+
+  // Orange neon border via outline-offset trick (box-shadow instead, clip-path masks border)
+  box-shadow:
+    0 0 0 1.5px rgba(255, 85, 0, 0.55),
+    0 0 28px rgba(255, 85, 0, 0.22),
+    0 0 60px rgba(255, 85, 0, 0.08),
+    inset 0 0 16px rgba(255, 85, 0, 0.05);
+
+  // Corner accent dots (decorative neon corners via ::before / ::after)
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #ff5500;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 3px rgba(255, 85, 0, 0.75);
+  }
+
+  // Top-left corner dot
+  &::before {
+    top: -4px;
+    left: -4px;
+  }
+
+  // Top-right corner dot
+  &::after {
+    top: -4px;
+    right: -4px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 0.06em;
+    font-family: $font-portfolio;   // Panchang
+    text-shadow:
+      0 0 30px rgba(255, 85, 0, 0.35),
+      0 0 8px  rgba(255, 85, 0, 0.15);
+    text-transform: uppercase;
+  }
+}
+
+// ── Main layout ────────────────────────────────────────────────
+.edu-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3vw;
+  align-items: center;
+  min-height: 0;
+}
+
+.edu-layout__left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.edu-layout__right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4vh;
+  height: 100%;
+  justify-content: center;
+}
+
+// ── Scene wrapper — grounded, holds laptop + wave ──────────────
+.edu-scene-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(480px, 90%);
+}
+
+// ── Scene — only this part floats via GSAP ─────────────────────
+.edu-scene {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  will-change: transform;
+}
+
+// ── NeonWave SVG ───────────────────────────────────────────────
+.edu-wave {
+  width: 88%;
+  height: 52px;
+  display: block;
+  margin-top: -6px;          // tuck under the laptop base edge
+  overflow: visible;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(255, 85, 0, 0.45));
+}
+
+// Primary flow line
+.edu-wave__line {
+  // path length ≈ 530; dash rides across and repeats
+  stroke-dasharray: 155 530;
+  stroke-dashoffset: 685;
+  animation: waveFlow 2.6s linear infinite;
+
+  // Secondary line with slight delay for layered feel
+  &--b {
+    stroke-dasharray: 95 530;
+    stroke-dashoffset: 625;
+    animation: waveFlow 3.4s linear infinite 0.7s;
+  }
+}
+
+
+// ── Ambient glow behind laptop ─────────────────────────────────
+.edu-scene__glow {
+  position: absolute;
+  bottom: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 65%;
+  height: 40%;
+  background: radial-gradient(ellipse, rgba(255, 85, 0, 0.32) 0%, transparent 70%);
+  filter: blur(22px);
+  pointer-events: none;
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+// ── Real laptop image ──────────────────────────────────────────
+.edu-laptop-img {
+  position: relative;
+  z-index: 2;
+  width: 82%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  // subtle drop shadow matching reference orange depth
+  filter:
+    drop-shadow(0 12px 32px rgba(255, 85, 0, 0.28))
+    drop-shadow(0 4px 12px rgba(0, 0, 0, 0.7));
+  user-select: none;
+}
+
+// ── Education cards ────────────────────────────────────────────
+.edu-card {
+  position: relative;
+  background: linear-gradient(150deg, rgba(22, 22, 22, 0.85), rgba(10, 10, 10, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  backdrop-filter: blur(14px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+
+  // Orange left glow strip
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 15%;
+    bottom: 15%;
+    width: 3px;
+    background: linear-gradient(180deg, transparent, #ff5500, transparent);
+    border-radius: 0 2px 2px 0;
+    box-shadow: 0 0 12px rgba(255, 85, 0, 0.7);
+  }
+
+  &:hover {
+    transform: translateX(4px);
+    box-shadow:
+      0 12px 36px rgba(0, 0, 0, 0.5),
+      0 0 20px rgba(255, 85, 0, 0.08),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    border-color: rgba(255, 85, 0, 0.2);
+  }
+}
+
+// ── College card ───────────────────────────────────────────────
+.edu-card--college {
+  .edu-card__inst {
+    margin: 0 0 0.25rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.92);
+    letter-spacing: 0.01em;
+  }
+
+  .edu-card__degree {
+    margin: 0 0 0.55rem;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.68);
+    line-height: 1.5;
+
+    .edu-card__degree-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ff5500;
+      text-shadow: 0 0 10px rgba(255, 85, 0, 0.45);
+      margin-right: 0.25rem;
+    }
+
+    .edu-card__period {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.45);
+      margin-left: 0.4rem;
+    }
+  }
+}
+
+// ── Experience cards ───────────────────────────────────────────
+.edu-card--exp {
+  .edu-card__exp-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+  }
+
+  .edu-card__duration {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.02em;
+  }
+
+  .edu-card__org {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #ff5500;
+    text-shadow: 0 0 12px rgba(255, 85, 0, 0.4);
+    letter-spacing: 0.01em;
+  }
+
+  .edu-card__desc {
+    margin: 0.4rem 0 0;
+    font-size: 0.73rem;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.58);
+  }
+}
+
+.edu-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 85, 0, 0.3);
+  background: rgba(255, 85, 0, 0.08);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.03em;
+  transition: border-color 0.2s, background 0.2s;
+
+  &:hover {
+    border-color: rgba(255, 85, 0, 0.55);
+    background: rgba(255, 85, 0, 0.14);
+  }
+}
+
+.edu-card__badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff5500;
+  box-shadow: 0 0 6px rgba(255, 85, 0, 0.8);
+  animation: dotPulse 1.8s ease-in-out infinite;
+}
+
+.edu-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.3rem;
+}
+
+.edu-card__meta-icon {
+  flex-shrink: 0;
+  color: rgba(255, 85, 0, 0.8);
+}
+
+.edu-card__items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+}
+
+// ── Keyframe animations ────────────────────────────────────────
+@keyframes eduWinIn {
+  from { opacity: 0; scale: 0.92; translate: 0 40px; filter: blur(12px); }
+  to   { opacity: 1; scale: 1;    translate: 0 0;    filter: blur(0); }
+}
+
+@keyframes eduWinRestore {
+  from { opacity: 0; scale: 0.94; translate: 0 24px; filter: blur(10px); }
+  to   { opacity: 1; scale: 1;    translate: 0 0;    filter: blur(0); }
+}
+
+@keyframes eduWinMinimize {
+  from { opacity: 1; scale: 1;    translate: 0 0;    filter: blur(0); }
+  to   { opacity: 0; scale: 0.94; translate: 0 40px; filter: blur(10px); }
+}
+
+@keyframes eduWinClose {
+  from { opacity: 1; scale: 1;    translate: 0 0;    filter: blur(0); }
+  to   { opacity: 0; scale: 0.92; translate: 0 40px; filter: blur(12px); }
+}
+
+// Wave flows left → right then loops seamlessly
+@keyframes waveFlow {
+  from { stroke-dashoffset:  685; }
+  to   { stroke-dashoffset: -530; }
+}
+
+// Backdrop fades in when Education opens
+@keyframes eduBackdropIn {
+  from { opacity: 0; backdrop-filter: blur(0); }
+  to   { opacity: 1; backdrop-filter: blur(7px); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+  50%       { opacity: 1;   transform: translateX(-50%) scale(1.1); }
+}
+
+@keyframes screenPulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.08); }
+}
+
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(255, 85, 0, 0.8); }
+  50%       { box-shadow: 0 0 12px rgba(255, 85, 0, 1); }
+}
+
+@keyframes eduDust {
+  0%, 100% { opacity: 0.5; transform: translateY(0); }
+  50%       { opacity: 0.8; transform: translateY(-5px); }
+}
+
+// ── Responsive ────────────────────────────────────────────────
+@media (max-width: 1100px) {
+  .edu-layout {
+    grid-template-columns: 1fr;
+    gap: 2vh;
+    overflow-y: auto;
+  }
+
+  .edu-layout__left {
+    display: none; // hide laptop on narrow screens to save space
+  }
+
+  .edu-window__body {
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .edu-hero-title__box {
+    padding: 0.5rem 1.8rem;
+    h1 { font-size: 1.6rem; }
+    &::before, &::after { display: none; }
+  }
+
+  .edu-card {
+    padding: 0.85rem 1rem;
+  }
+}

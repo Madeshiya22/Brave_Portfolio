@@ -11,6 +11,7 @@ const Home = ({
   onOpenProjects,
   onOpenSkills,
   onPrefetchSkills,
+  onOpenEducation,
 }) => {
   return (
     <Hero
@@ -23,6 +24,7 @@ const Home = ({
       onOpenProjects={onOpenProjects}
       onOpenSkills={onOpenSkills}
       onPrefetchSkills={onPrefetchSkills}
+      onOpenEducation={onOpenEducation}
     />
   );
 };
