@@ -72,15 +72,13 @@ const SKILL_CARDS = [
 const Skills = ({ onClose, onMinimize, isMinimized = false }) => {
   const windowRef = useRef(null);
   const dragOffsetRef = useRef({ x: 0, y: 0 });
+  const hasMountedRef = useRef(false);
   const [isDragging, setIsDragging] = useState(false);
   const [transitionState, setTransitionState] = useState('enter');
   const [position, setPosition] = useState(() => {
-    if (typeof window === 'undefined') return { x: 24, y: 120 };
+    if (typeof window === 'undefined') return { x: 0, y: 0 };
 
-    return {
-      x: 24,
-      y: Math.max(20, Math.round(window.innerHeight * 0.1)),
-    };
+    return { x: 0, y: 0 };
   });
 
   useEffect(() => {
@@ -89,8 +87,8 @@ const Skills = ({ onClose, onMinimize, isMinimized = false }) => {
     const handlePointerMove = (event) => {
       const panelWidth = windowRef.current?.offsetWidth ?? 1100;
       const panelHeight = windowRef.current?.offsetHeight ?? 700;
-      const nextX = clamp(event.clientX - dragOffsetRef.current.x, 8, window.innerWidth - panelWidth - 8);
-      const nextY = clamp(event.clientY - dragOffsetRef.current.y, 8, window.innerHeight - panelHeight - 8);
+      const nextX = clamp(event.clientX - dragOffsetRef.current.x, 0, Math.max(0, window.innerWidth - panelWidth));
+      const nextY = clamp(event.clientY - dragOffsetRef.current.y, 0, Math.max(0, window.innerHeight - panelHeight));
       setPosition({ x: nextX, y: nextY });
     };
 
@@ -111,8 +109,8 @@ const Skills = ({ onClose, onMinimize, isMinimized = false }) => {
       const panelHeight = windowRef.current?.offsetHeight ?? 700;
 
       setPosition((prev) => ({
-        x: clamp(prev.x, 8, window.innerWidth - panelWidth - 8),
-        y: clamp(prev.y, 8, window.innerHeight - panelHeight - 8),
+        x: clamp(prev.x, 0, Math.max(0, window.innerWidth - panelWidth)),
+        y: clamp(prev.y, 0, Math.max(0, window.innerHeight - panelHeight)),
       }));
     };
 
@@ -120,11 +118,22 @@ const Skills = ({ onClose, onMinimize, isMinimized = false }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Clear the enter animation after it finishes on first mount
   useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setTransitionState('idle');
+      hasMountedRef.current = true;
+    }, 500);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  // Handle restore from minimized — skip on initial mount to avoid double animation
+  useEffect(() => {
+    if (!hasMountedRef.current) return undefined;
     if (isMinimized) return undefined;
 
     setTransitionState('restore');
-    const timer = window.setTimeout(() => setTransitionState('idle'), 320);
+    const timer = window.setTimeout(() => setTransitionState('idle'), 500);
     return () => window.clearTimeout(timer);
   }, [isMinimized]);
 
@@ -144,12 +153,12 @@ const Skills = ({ onClose, onMinimize, isMinimized = false }) => {
 
   const handleMinimize = () => {
     setTransitionState('minimize');
-    window.setTimeout(() => onMinimize?.(), 110);
+    window.setTimeout(() => onMinimize?.(), 400);
   };
 
   const handleClose = () => {
     setTransitionState('close');
-    window.setTimeout(() => onClose?.(), 110);
+    window.setTimeout(() => onClose?.(), 400);
   };
 
   if (isMinimized) {
@@ -158,94 +167,92 @@ const Skills = ({ onClose, onMinimize, isMinimized = false }) => {
 
   return (
     <div className="skills-desktop" aria-live="polite">
-      {!isMinimized && (
-        <article
-          ref={windowRef}
-          className={`skills-window skills-window--${transitionState}${isDragging ? ' is-dragging' : ''}`}
-          style={{ transform: `translate3d(${position.x}px, ${position.y}px, 0)` }}
-        >
-          <header className="skills-window__header" onPointerDown={startDragging}>
-            <h2 className="skills-window__title">Skills</h2>
-            <div className="skills-window__actions">
-              <button
-                className="window-btn window-btn--min"
-                type="button"
-                aria-label="Minimize Skills"
-                onClick={handleMinimize}
-              >
-                <Minus size={15} />
-              </button>
-              <button
-                className="window-btn window-btn--close"
-                type="button"
-                aria-label="Close Skills"
-                onClick={handleClose}
-              >
-                <X size={15} />
-              </button>
-            </div>
-          </header>
-
-          <div className="skills-window__body">
-            <section className="skills-header">
-              <div className="skills-header__glow" />
-              <div className="skills-header__top">
-                <p className="skills-header__subtitle">Future is deployable</p>
-                <div className="skills-header__title-box">
-                  <h1 className="skills-header__title">SKILL'S</h1>
-                </div>
-                <p className="skills-header__tagline">Build bridges, not walls</p>
-              </div>
-            </section>
-
-            <section className="skills-grid">
-              {SKILL_CARDS.map((card) => (
-                <div
-                  key={card.id}
-                  className="skills-card"
-                  style={{
-                    '--card-rotate': `${card.rotation}deg`,
-                    '--card-shift': card.id === 'basics' ? '14px' : card.id === 'mern' ? '2px' : card.id === 'ecosystem' ? '0px' : '16px',
-                    '--card-scale': card.id === 'design' ? '0.94' : '1',
-                  }}
-                >
-                  <div className="skills-card__holes">
-                    {Array.from({ length: 8 }).map((_, index) => (
-                      <span key={index} className="skills-card__hole" />
-                    ))}
-                  </div>
-
-                  <div className="skills-card__head">
-                    <span className="skills-card__brand">Skills</span>
-                    <span className="skills-card__label">{card.label}</span>
-                  </div>
-
-                  <div className="skills-card__content">
-                    <div className="skills-card__items">
-                      {card.skills.map((skill) => {
-                        const Icon = skill.icon;
-                        return (
-                          <div key={skill.name} className="skill-item">
-                            <span className="skill-item__icon" style={{ color: skill.color }} aria-hidden="true">
-                              <Icon size={20} />
-                            </span>
-                            <div className="skill-item__copy">
-                              <strong className="skill-item__name">{skill.name}</strong>
-                              <p className="skill-item__desc">{skill.desc}</p>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="skills-card__glow-border" />
-                </div>
-              ))}
-            </section>
+      <article
+        ref={windowRef}
+        className={`skills-window skills-window--${transitionState}${isDragging ? ' is-dragging' : ''}`}
+        style={{ transform: `translate3d(${position.x}px, ${position.y}px, 0)` }}
+      >
+        <header className="skills-window__header" onPointerDown={startDragging}>
+          <h2 className="skills-window__title">Skills</h2>
+          <div className="skills-window__actions">
+            <button
+              className="window-btn window-btn--min"
+              type="button"
+              aria-label="Minimize Skills"
+              onClick={handleMinimize}
+            >
+              <Minus size={15} />
+            </button>
+            <button
+              className="window-btn window-btn--close"
+              type="button"
+              aria-label="Close Skills"
+              onClick={handleClose}
+            >
+              <X size={15} />
+            </button>
           </div>
-        </article>
-      )}
+        </header>
+
+        <div className="skills-window__body">
+          <section className="skills-header">
+            <div className="skills-header__glow" />
+            <div className="skills-header__top">
+              <p className="skills-header__subtitle">Future is deployable</p>
+              <div className="skills-header__title-box">
+                <h1 className="skills-header__title">SKILL'S</h1>
+              </div>
+              <p className="skills-header__tagline">Build bridges, not walls</p>
+            </div>
+          </section>
+
+          <section className="skills-grid">
+            {SKILL_CARDS.map((card) => (
+              <div
+                key={card.id}
+                className="skills-card"
+                style={{
+                  '--card-rotate': `${card.rotation}deg`,
+                  '--card-shift': card.id === 'basics' ? '14px' : card.id === 'mern' ? '2px' : card.id === 'ecosystem' ? '0px' : '16px',
+                  '--card-scale': card.id === 'design' ? '0.94' : '1',
+                }}
+              >
+                <div className="skills-card__holes">
+                  {Array.from({ length: 8 }).map((_, index) => (
+                    <span key={index} className="skills-card__hole" />
+                  ))}
+                </div>
+
+                <div className="skills-card__head">
+                  <span className="skills-card__brand">Skills</span>
+                  <span className="skills-card__label">{card.label}</span>
+                </div>
+
+                <div className="skills-card__content">
+                  <div className="skills-card__items">
+                    {card.skills.map((skill) => {
+                      const Icon = skill.icon;
+                      return (
+                        <div key={skill.name} className="skill-item">
+                          <span className="skill-item__icon" style={{ color: skill.color }} aria-hidden="true">
+                            <Icon size={20} />
+                          </span>
+                          <div className="skill-item__copy">
+                            <strong className="skill-item__name">{skill.name}</strong>
+                            <p className="skill-item__desc">{skill.desc}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="skills-card__glow-border" />
+              </div>
+            ))}
+          </section>
+        </div>
+      </article>
     </div>
   );
 };

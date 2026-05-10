@@ -11,32 +11,39 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: min(1440px, 92vw);
-  max-height: min(92vh, 860px);
-  border-radius: 16px;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  border-radius: 0;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.06);
   background:
     radial-gradient(circle at 50% 0%, rgba(255, 45, 20, 0.1), transparent 38%),
     linear-gradient(145deg, rgba(20, 20, 22, 0.9), rgba(8, 8, 8, 0.96));
   backdrop-filter: blur(20px);
-  box-shadow:
-    0 28px 74px rgba(0, 0, 0, 0.5),
-    0 0 24px rgba(255, 45, 20, 0.08);
+  box-shadow: none;
   pointer-events: auto;
-  animation: skillsWindowIn 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: none;
+  will-change: transform, opacity, scale, translate;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.skills-window--enter {
+  animation: skillsWindowIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .skills-window--restore {
-  animation: skillsWindowRestore 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: skillsWindowRestore 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .skills-window--minimize {
-  animation: skillsWindowMinimize 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation: skillsWindowMinimize 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .skills-window--close {
-  animation: skillsWindowClose 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation: skillsWindowClose 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .skills-window.is-dragging {
@@ -73,16 +80,16 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  opacity: 0;
-  transform: translateY(-4px);
-  pointer-events: none;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
   transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
 .skills-window:hover .skills-window__actions,
 .skills-window:focus-within .skills-window__actions {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
   pointer-events: auto;
 }
 
@@ -112,9 +119,13 @@
 }
 
 .skills-window__body {
-  max-height: calc(min(92vh, 860px) - 48px);
+  height: calc(100vh - 48px);
+  max-height: calc(100vh - 48px);
   overflow: hidden;
-  padding: 1.05rem 1.28rem 1.05rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2vh 4vw;
   background:
     radial-gradient(circle at 50% 24%, rgba(255, 40, 16, 0.12), transparent 26%),
     linear-gradient(180deg, rgba(5, 5, 5, 0.98), rgba(5, 5, 5, 0.97));
@@ -153,7 +164,7 @@
 .skills-header {
   position: relative;
   text-align: center;
-  margin-bottom: 1.1rem;
+  margin-bottom: 3.5vh;
 }
 
 .skills-header::before {
@@ -226,7 +237,7 @@
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.82rem;
+  gap: 1.2vw;
   perspective: 1200px;
 }
 
@@ -234,8 +245,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 272px;
-  padding: 0.7rem 0.85rem 0.76rem;
+  min-height: 390px;
+  padding: 1.1rem 1.25rem 1.1rem;
   border-radius: 11px;
   overflow: hidden;
   background:
@@ -318,7 +329,7 @@
   position: relative;
   z-index: 1;
   flex: 1;
-  padding-top: 0.5rem;
+  padding-top: 0.3rem;
 }
 
 .skills-card__items {
@@ -330,8 +341,8 @@
 .skill-item {
   display: flex;
   align-items: flex-start;
-  gap: 0.7rem;
-  padding: 0.06rem 0 0.3rem;
+  gap: 0.6rem;
+  padding: 0.04rem 0 0.25rem;
 }
 
 .skill-item:not(:last-child) {
@@ -380,13 +391,15 @@
 @keyframes skillsWindowIn {
   from {
     opacity: 0;
-    transform: translate3d(0, 40px, 0) scale(0.95);
-    filter: blur(8px);
+    scale: 0.92;
+    translate: 0 40px;
+    filter: blur(12px);
   }
 
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
+    scale: 1;
+    translate: 0 0;
     filter: blur(0);
   }
 }
@@ -394,13 +407,15 @@
 @keyframes skillsWindowRestore {
   from {
     opacity: 0;
-    transform: translate3d(0, 24px, 0) scale(0.98);
-    filter: blur(8px);
+    scale: 0.94;
+    translate: 0 24px;
+    filter: blur(10px);
   }
 
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
+    scale: 1;
+    translate: 0 0;
     filter: blur(0);
   }
 }
@@ -408,28 +423,32 @@
 @keyframes skillsWindowMinimize {
   from {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
+    scale: 1;
+    translate: 0 0;
     filter: blur(0);
   }
 
   to {
     opacity: 0;
-    transform: translate3d(0, 24px, 0) scale(0.94);
-    filter: blur(8px);
+    scale: 0.94;
+    translate: 0 40px;
+    filter: blur(10px);
   }
 }
 
 @keyframes skillsWindowClose {
   from {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
+    scale: 1;
+    translate: 0 0;
     filter: blur(0);
   }
 
   to {
     opacity: 0;
-    transform: translate3d(0, 10px, 0) scale(0.92);
-    filter: blur(10px);
+    scale: 0.92;
+    translate: 0 40px;
+    filter: blur(12px);
   }
 }
 
@@ -452,14 +471,16 @@
   }
 
   .skills-card {
-    min-height: 258px;
+    min-height: 380px;
   }
 }
 
 @media (max-width: 768px) {
   .skills-window {
-    width: min(98vw, 620px);
-    max-height: min(94vh, 760px);
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
   }
 
   .skills-window__body {
