@@ -1,3 +1,4 @@
+cls
 import { useEffect, useRef, useState } from 'react';
 import { Minus, X, GraduationCap, Briefcase, Layers } from 'lucide-react';
 import gsap from 'gsap';
