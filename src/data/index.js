@@ -90,6 +90,20 @@ export const projectSections = [
         githubUrl: 'https://github.com/Madeshiya22/koder3/tree/master/Practise-7',
         liveUrl: 'https://koder3-hl5q.vercel.app/',
       },
+      {
+        title: 'Microsoft Clone',
+        description: 'A fully responsive Microsoft clone website built with HTML, CSS, SCSS, and media queries, featuring hero sections, product cards, business sections, social links, and a complete responsive footer.',
+        image: buildProjectImage('Microsoft Clone', '#ff5a1f'),
+        githubUrl: 'https://github.com/Madeshiya22/koder3/tree/master/responive',
+        liveUrl: 'https://koder3-4dye.vercel.app/',
+      },
+      {
+        title: 'Slack Clone',
+        description: 'A fully responsive Slack clone website built with HTML, CSS, SCSS, and media queries, featuring hero content, videos, feature sections, stats, resource cards, CTA blocks, and a complete responsive footer.',
+        image: buildProjectImage('Slack Clone', '#ff5a1f'),
+        githubUrl: 'https://github.com/Madeshiya22/Slack',
+        liveUrl: 'https://madeshiya22.github.io/Slack/',
+      },
     ],
   },
   {
