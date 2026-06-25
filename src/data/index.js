@@ -56,6 +56,13 @@ export const projectSections = [
         liveUrl: 'https://koder3.vercel.app/',
       },
       {
+        title: 'DVSY',
+        description: 'A modern fashion landing page built with HTML and CSS, featuring a bold hero design, designer-focused sections, brand stats, about content, and creative image grids.',
+        image: buildProjectImage('DVSY', '#ff5a1f'),
+        githubUrl: 'https://github.com/Madeshiya22/koder3/blob/master/Practice-2/index.html',
+        liveUrl: 'https://koder3-vbtv.vercel.app/',
+      },
+      {
         title: 'Orange Button Landing',
         description: 'A minimal landing section focused on strong contrast, hover states, and spacing.',
         image: buildProjectImage('Orange Button Landing', '#ff5a1f'),
