@@ -49,6 +49,13 @@ export const projectSections = [
     summary: 'Static UI and layout experiments made with clean HTML and CSS.',
     projects: [
       {
+        title: 'ALICE',
+        description: 'A responsive business consulting website built with HTML and CSS, featuring services, testimonials, portfolio, blog, and modern landing page sections.',
+        image: buildProjectImage('ALICE', '#ff5a1f'),
+        githubUrl: 'https://github.com/Madeshiya22/koder3/tree/master/Practice-1',
+        liveUrl: 'https://koder3.vercel.app/',
+      },
+      {
         title: 'Orange Button Landing',
         description: 'A minimal landing section focused on strong contrast, hover states, and spacing.',
         image: buildProjectImage('Orange Button Landing', '#ff5a1f'),
