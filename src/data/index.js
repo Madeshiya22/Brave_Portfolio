@@ -1,8 +1,8 @@
 export const socialLinks = [
-  { name: 'Instagram', url: '#', icon: 'FaInstagram' },
-  { name: 'LinkedIn', url: '#', icon: 'FaLinkedin' },
-  { name: 'GitHub', url: '#', icon: 'FaGithub' },
-  { name: 'WhatsApp', url: '#', icon: 'FaWhatsapp' }
+  { name: 'Instagram', url: 'https://www.instagram.com/rahul851r?igsh=dGJnMDBkdHNza3hj', icon: 'FaInstagram' },
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/rahul-madeshiya-245950299?utm_source=share_via&utm_content=profile&utm_medium=member_android', icon: 'FaLinkedin' },
+  { name: 'GitHub', url: 'https://github.com/Madeshiya22', icon: 'FaGithub' },
+  { name: 'WhatsApp', url: 'https://wa.me/917307179159', icon: 'FaWhatsapp' }
 ];
 
 const buildProjectImage = (title, accent) => {

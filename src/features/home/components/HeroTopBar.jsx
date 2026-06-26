@@ -5,10 +5,10 @@ import Clock from './Clock';
 import CursorToggle from '../../../components/Cursor/CursorToggle';
 
 const SOCIAL_LINKS = [
-  { href: '#', cls: 'icon-btn--instagram', Icon: FaInstagram, label: 'Instagram' },
-  { href: '#', cls: 'icon-btn--linkedin', Icon: FaLinkedin, label: 'LinkedIn' },
-  { href: '#', cls: 'icon-btn--github', Icon: FaGithub, label: 'GitHub' },
-  { href: '#', cls: 'icon-btn--whatsapp', Icon: FaWhatsapp, label: 'WhatsApp' },
+  { href: 'https://www.instagram.com/rahul851r?igsh=dGJnMDBkdHNza3hj', cls: 'icon-btn--instagram', Icon: FaInstagram, label: 'Instagram' },
+  { href: 'https://www.linkedin.com/in/rahul-madeshiya-245950299?utm_source=share_via&utm_content=profile&utm_medium=member_android', cls: 'icon-btn--linkedin', Icon: FaLinkedin, label: 'LinkedIn' },
+  { href: 'https://github.com/Madeshiya22', cls: 'icon-btn--github', Icon: FaGithub, label: 'GitHub' },
+  { href: 'https://wa.me/917307179159', cls: 'icon-btn--whatsapp', Icon: FaWhatsapp, label: 'WhatsApp' },
 ];
 
 const HeroTopBar = ({ theme, setTheme }) => {
@@ -42,7 +42,7 @@ const HeroTopBar = ({ theme, setTheme }) => {
               key={label}
               style={{ animationDelay: `${0.15 + i * 0.1}s` }}
             >
-              <a href={href} className={`icon-btn ${cls}`}>
+              <a href={href} target="_blank" rel="noopener noreferrer" className={`icon-btn ${cls}`}>
                 <Icon size={32} />
               </a>
               <span className="icon-name">{label}</span>
