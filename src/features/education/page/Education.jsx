@@ -1,48 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
-import { Minus, X, GraduationCap, Briefcase, Layers } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { Minus, X } from 'lucide-react';
 import gsap from 'gsap';
 import laptopImg from '../../../assets/laptop.png';
+import { CARDS } from '../utils/educationData';
+import { useWindowDrag } from '../../../hooks/useWindowDrag';
 import '../../../styles/Education.scss';
-
-const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
-
-/* ── Education data ───────────────────────────────────────────── */
-const CARDS = [
-  {
-    id: 'college',
-    type: 'education',
-    institution: 'Chandigarh Engineering College, Landran Mohali',
-    degree: 'B.Tech',
-    field: 'Information Technology',
-    period: '( 2022-2026 )',
-    meta: 'CGPA - 8.2',
-    MetaIcon: GraduationCap,
-    badge: null,
-  },
-  {
-    id: 'thinknext',
-    type: 'experience',
-    duration: 'Experience - 2 Month',
-    institution: 'ThinkNext Technology',
-    badge: 'Learning - MERN',
-    project: 'Build Project - Mentolink',
-    ProjectIcon: Briefcase,
-    description:
-      'Mentolink is a platform which help to solve a problem or full-fill the gap between student and their carrier path',
-  },
-  {
-    id: 'sheryians',
-    type: 'experience',
-    duration: 'Experience - 6 Month',
-    institution: 'Sheryians coding school',
-    badge: 'Learning - Full stack',
-    items: [
-      { Icon: Briefcase, text: 'Technology - MERN , DOCKER, AWS, Kubernetes' },
-      { Icon: Briefcase, text: 'Build Project - Multiple Project' },
-      { Icon: Layers,    text: 'INSTAGRAM , Pinterest, GEN_AI' },
-    ],
-  },
-];
 
 /* ── Neon energy wave — beneath laptop only ─────────────── */
 const NeonWave = () => (
@@ -223,81 +185,15 @@ const EducationCard = ({ card, index }) => {
 
 /* ── Main Education window ────────────────────────────────────── */
 const Education = ({ onClose, onMinimize, isMinimized = false }) => {
-  const windowRef   = useRef(null);
-  const dragOffRef  = useRef({ x: 0, y: 0 });
-  const hasMounted  = useRef(false);
-  const [isDragging, setIsDragging]       = useState(false);
-  const [transitionState, setTransition]  = useState('enter');
-  const [position, setPosition]           = useState({ x: 0, y: 0 });
-
-  /* drag */
-  useEffect(() => {
-    if (!isDragging) return;
-    const onMove = (e) => {
-      const w = windowRef.current?.offsetWidth  ?? 1100;
-      const h = windowRef.current?.offsetHeight ?? 680;
-      setPosition({
-        x: clamp(e.clientX - dragOffRef.current.x, 0, Math.max(0, window.innerWidth  - w)),
-        y: clamp(e.clientY - dragOffRef.current.y, 0, Math.max(0, window.innerHeight - h)),
-      });
-    };
-    const stop = () => setIsDragging(false);
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup',   stop);
-    return () => {
-      window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerup',   stop);
-    };
-  }, [isDragging]);
-
-  /* resize clamp */
-  useEffect(() => {
-    const onResize = () => {
-      const w = windowRef.current?.offsetWidth  ?? 1100;
-      const h = windowRef.current?.offsetHeight ?? 680;
-      setPosition(p => ({
-        x: clamp(p.x, 0, Math.max(0, window.innerWidth  - w)),
-        y: clamp(p.y, 0, Math.max(0, window.innerHeight - h)),
-      }));
-    };
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  /* enter → idle */
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setTransition('idle');
-      hasMounted.current = true;
-    }, 500);
-    return () => clearTimeout(t);
-  }, []);
-
-  /* restore after minimize */
-  useEffect(() => {
-    if (!hasMounted.current || isMinimized) return;
-    setTransition('restore');
-    const t = setTimeout(() => setTransition('idle'), 500);
-    return () => clearTimeout(t);
-  }, [isMinimized]);
-
-  const startDrag = (e) => {
-    if (e.button !== 0 || e.target.closest('button')) return;
-    const b = windowRef.current?.getBoundingClientRect();
-    if (!b) return;
-    dragOffRef.current = { x: e.clientX - b.left, y: e.clientY - b.top };
-    setIsDragging(true);
-  };
-
-  const handleMinimize = () => {
-    setTransition('minimize');
-    setTimeout(() => onMinimize?.(), 400);
-  };
-
-  const handleClose = () => {
-    setTransition('close');
-    setTimeout(() => onClose?.(), 400);
-  };
+  const {
+    windowRef,
+    position,
+    isDragging,
+    transitionState,
+    startDragging,
+    handleMinimize,
+    handleClose,
+  } = useWindowDrag({ onClose, onMinimize, isMinimized, defaultWidth: 1100, defaultHeight: 680 });
 
   if (isMinimized) return null;
 
@@ -309,7 +205,7 @@ const Education = ({ onClose, onMinimize, isMinimized = false }) => {
         style={{ transform: `translate3d(${position.x}px,${position.y}px,0)` }}
       >
         {/* ── Title bar ── */}
-        <header className="edu-window__header" onPointerDown={startDrag}>
+        <header className="edu-window__header" onPointerDown={startDragging}>
           <h2 className="edu-window__title">Education</h2>
           <div className="edu-window__actions">
             <button className="window-btn window-btn--min"   type="button" aria-label="Minimize Education" onClick={handleMinimize}><Minus size={15}/></button>

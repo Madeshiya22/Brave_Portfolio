@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { FolderOpen, User, Code2, BookOpen } from 'lucide-react';
 import useLenis from './hooks/useLenis';
 import Home from './features/home/page/Home';
@@ -9,6 +9,7 @@ import { ABOUT_CONTENT } from './features/about/utils/aboutContent';
 import { projectSections } from './data';
 import { CursorProvider } from './context/CursorContext';
 import CustomCursor from './components/Cursor/CustomCursor';
+import { useWindowManager } from './hooks/useWindowManager';
 
 const Skills    = lazy(() => import('./features/skills/page/Skills'));
 const Education = lazy(() => import('./features/education/page/Education'));
@@ -18,118 +19,13 @@ const preloadEdu    = () => { void import('./features/education/page/Education')
 
 function App() {
   useLenis();
-  const [aboutOpen, setAboutOpen]           = useState(() => JSON.parse(sessionStorage.getItem('appState_aboutOpen'))      || false);
-  const [aboutMinimized, setAboutMinimized] = useState(() => JSON.parse(sessionStorage.getItem('appState_aboutMinimized')) || false);
-  const [projectsOpen, setProjectsOpen]     = useState(() => JSON.parse(sessionStorage.getItem('appState_projectsOpen'))   || false);
-  const [projectsMinimized, setProjectsMinimized] = useState(() => JSON.parse(sessionStorage.getItem('appState_projectsMinimized')) || false);
-  const [skillsOpen, setSkillsOpen]         = useState(() => JSON.parse(sessionStorage.getItem('appState_skillsOpen'))     || false);
-  const [skillsMinimized, setSkillsMinimized] = useState(() => JSON.parse(sessionStorage.getItem('appState_skillsMinimized')) || false);
-  const [eduOpen, setEduOpen]               = useState(() => JSON.parse(sessionStorage.getItem('appState_eduOpen'))        || false);
-  const [eduMinimized, setEduMinimized]     = useState(() => JSON.parse(sessionStorage.getItem('appState_eduMinimized'))   || false);
-  const [dockOrder, setDockOrder]           = useState(() => JSON.parse(sessionStorage.getItem('appState_dockOrder'))      || []);
-  const [activeSection, setActiveSection]   = useState(() => sessionStorage.getItem('appState_activeSection') || 'html-css');
-
-  useEffect(() => { sessionStorage.setItem('appState_aboutOpen',        JSON.stringify(aboutOpen));        }, [aboutOpen]);
-  useEffect(() => { sessionStorage.setItem('appState_aboutMinimized',   JSON.stringify(aboutMinimized));   }, [aboutMinimized]);
-  useEffect(() => { sessionStorage.setItem('appState_projectsOpen',     JSON.stringify(projectsOpen));     }, [projectsOpen]);
-  useEffect(() => { sessionStorage.setItem('appState_projectsMinimized',JSON.stringify(projectsMinimized));}, [projectsMinimized]);
-  useEffect(() => { sessionStorage.setItem('appState_skillsOpen',       JSON.stringify(skillsOpen));       }, [skillsOpen]);
-  useEffect(() => { sessionStorage.setItem('appState_skillsMinimized',  JSON.stringify(skillsMinimized));  }, [skillsMinimized]);
-  useEffect(() => { sessionStorage.setItem('appState_eduOpen',          JSON.stringify(eduOpen));          }, [eduOpen]);
-  useEffect(() => { sessionStorage.setItem('appState_eduMinimized',     JSON.stringify(eduMinimized));     }, [eduMinimized]);
-  useEffect(() => { sessionStorage.setItem('appState_dockOrder',        JSON.stringify(dockOrder));        }, [dockOrder]);
-  useEffect(() => { sessionStorage.setItem('appState_activeSection',    activeSection);                    }, [activeSection]);
-
-  const openAbout = () => {
-    setAboutOpen(true);
-    setAboutMinimized(false);
-  };
-
-  const minimizeAbout = () => {
-    setAboutMinimized(true);
-    setDockOrder((current) => (current.includes('about') ? current : [...current, 'about']));
-  };
-
-  const restoreAbout = () => {
-    setAboutOpen(true);
-    setAboutMinimized(false);
-    setDockOrder((current) => current.filter((item) => item !== 'about'));
-  };
-
-  const closeAbout = () => {
-    setAboutOpen(false);
-    setAboutMinimized(false);
-    setDockOrder((current) => current.filter((item) => item !== 'about'));
-  };
-
-  const openProjects = (sectionId = 'html-css') => {
-    setActiveSection(sectionId);
-    setProjectsOpen(true);
-    setProjectsMinimized(false);
-  };
-
-  const minimizeProjects = () => {
-    setProjectsMinimized(true);
-    setDockOrder((current) => (current.includes('projects') ? current : [...current, 'projects']));
-  };
-
-  const restoreProjects = () => {
-    setProjectsOpen(true);
-    setProjectsMinimized(false);
-    setDockOrder((current) => current.filter((item) => item !== 'projects'));
-  };
-
-  const closeProjects = () => {
-    setProjectsOpen(false);
-    setProjectsMinimized(false);
-    setDockOrder((current) => current.filter((item) => item !== 'projects'));
-  };
-
-  const openSkills = () => {
-    preloadSkills();
-    setSkillsOpen(true);
-    setSkillsMinimized(false);
-  };
-
-  const minimizeSkills = () => {
-    setSkillsMinimized(true);
-    setDockOrder((current) => (current.includes('skills') ? current : [...current, 'skills']));
-  };
-
-  const restoreSkills = () => {
-    setSkillsOpen(true);
-    setSkillsMinimized(false);
-    setDockOrder((current) => current.filter((item) => item !== 'skills'));
-  };
-
-  const closeSkills = () => {
-    setSkillsOpen(false);
-    setSkillsMinimized(false);
-    setDockOrder((current) => current.filter((item) => item !== 'skills'));
-  };
-
-  const openEducation = () => {
-    preloadEdu();
-    setEduOpen(true);
-    setEduMinimized(false);
-  };
-
-  const minimizeEducation = () => {
-    setEduMinimized(true);
-    setDockOrder((current) => (current.includes('education') ? current : [...current, 'education']));
-  };
-
-  const restoreEducation = () => {
-    setEduOpen(true);
-    setEduMinimized(false);
-    setDockOrder((current) => current.filter((item) => item !== 'education'));
-  };
-
-  const closeEducation = () => {
-    setEduOpen(false);
-    setEduMinimized(false);
-    setDockOrder((current) => current.filter((item) => item !== 'education'));
-  };
+  const {
+    aboutOpen, aboutMinimized, openAbout, minimizeAbout, restoreAbout, closeAbout,
+    projectsOpen, projectsMinimized, openProjects, minimizeProjects, restoreProjects, closeProjects,
+    skillsOpen, skillsMinimized, openSkills, minimizeSkills, restoreSkills, closeSkills,
+    eduOpen, eduMinimized, openEducation, minimizeEducation, restoreEducation, closeEducation,
+    dockOrder, activeSection, setActiveSection
+  } = useWindowManager();
 
   const activeProjectSection = projectSections.find((section) => section.id === activeSection) ?? projectSections[0];
 

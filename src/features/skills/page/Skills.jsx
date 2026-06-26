@@ -1,165 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Minus, X } from 'lucide-react';
-import {
-  FaHtml5,
-  FaCss3Alt,
-  FaJs,
-  FaNodeJs,
-  FaReact,
-  FaSass,
-  FaDocker,
-  FaAws,
-  FaFigma,
-} from 'react-icons/fa';
-import {
-  SiExpress,
-  SiMongodb,
-  SiKubernetes,
-  SiGreensock,
-  SiFramer,
-  SiCanva,
-} from 'react-icons/si';
+import { SKILL_CARDS } from '../utils/skillsData';
+import { useWindowDrag } from '../../../hooks/useWindowDrag';
 import '../../../styles/Skills.scss';
 
-const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-
-const SKILL_CARDS = [
-  {
-    id: 'basics',
-    label: 'Basics Skills',
-    skills: [
-      { name: 'HTML', desc: 'Structure is the soul of creation.', icon: FaHtml5, color: '#FF5722' },
-      { name: 'CSS', desc: 'Style turns logic into art.', icon: FaCss3Alt, color: '#2196F3' },
-      { name: 'JavaScript', desc: 'Code that breathes life into ideas.', icon: FaJs, color: '#F7DF1E' },
-    ],
-    rotation: 0,
-  },
-  {
-    id: 'mern',
-    label: 'MERN',
-    skills: [
-      { name: 'Node.js', desc: 'Powering the unseen engine behind every experience.', icon: FaNodeJs, color: '#68A063' },
-      { name: 'Express.js', desc: 'Simplicity that accelerates innovation.', icon: SiExpress, color: '#FFFFFF' },
-      { name: 'React.js', desc: 'Dynamic minds build dynamic interfaces.', icon: FaReact, color: '#61DAFB' },
-      { name: 'MongoDB', desc: 'Data with roots that grow possibilities.', icon: SiMongodb, color: '#13AA52' },
-      { name: 'Sass', desc: 'Elegance in every layer of design.', icon: FaSass, color: '#CC6699' },
-    ],
-    rotation: -6,
-  },
-  {
-    id: 'ecosystem',
-    label: 'Developer Ecosystem Tools,\nAnimation',
-    skills: [
-      { name: 'Docker', desc: 'Containers that carry consistency.', icon: FaDocker, color: '#2496ED' },
-      { name: 'AWS', desc: 'Cloud power that fuels innovation.', icon: FaAws, color: '#FF9900' },
-      { name: 'Kubernetes', desc: 'Orchestration that scales imagination.', icon: SiKubernetes, color: '#326CE5' },
-      { name: 'GSAP', desc: 'Performance meets precision in motion.', icon: SiGreensock, color: '#88CE02' },
-      { name: 'Framer', desc: 'React components that breathe with life.', icon: SiFramer, color: '#0055FF' },
-    ],
-    rotation: 0,
-  },
-  {
-    id: 'design',
-    label: 'Design',
-    skills: [
-      { name: 'Figma', desc: 'Collaboration is the canvas of creativity.', icon: FaFigma, color: '#F24E1E' },
-      { name: 'Canva', desc: 'Design made simple, impact made big.', icon: SiCanva, color: '#00D4FF' },
-    ],
-    rotation: 6,
-  },
-];
-
 const Skills = ({ onClose, onMinimize, isMinimized = false }) => {
-  const windowRef = useRef(null);
-  const dragOffsetRef = useRef({ x: 0, y: 0 });
-  const hasMountedRef = useRef(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [transitionState, setTransitionState] = useState('enter');
-  const [position, setPosition] = useState(() => {
-    if (typeof window === 'undefined') return { x: 0, y: 0 };
-
-    return { x: 0, y: 0 };
-  });
-
-  useEffect(() => {
-    if (!isDragging) return undefined;
-
-    const handlePointerMove = (event) => {
-      const panelWidth = windowRef.current?.offsetWidth ?? 1100;
-      const panelHeight = windowRef.current?.offsetHeight ?? 700;
-      const nextX = clamp(event.clientX - dragOffsetRef.current.x, 0, Math.max(0, window.innerWidth - panelWidth));
-      const nextY = clamp(event.clientY - dragOffsetRef.current.y, 0, Math.max(0, window.innerHeight - panelHeight));
-      setPosition({ x: nextX, y: nextY });
-    };
-
-    const stopDragging = () => setIsDragging(false);
-
-    window.addEventListener('pointermove', handlePointerMove);
-    window.addEventListener('pointerup', stopDragging);
-
-    return () => {
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('pointerup', stopDragging);
-    };
-  }, [isDragging]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const panelWidth = windowRef.current?.offsetWidth ?? 1100;
-      const panelHeight = windowRef.current?.offsetHeight ?? 700;
-
-      setPosition((prev) => ({
-        x: clamp(prev.x, 0, Math.max(0, window.innerWidth - panelWidth)),
-        y: clamp(prev.y, 0, Math.max(0, window.innerHeight - panelHeight)),
-      }));
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Clear the enter animation after it finishes on first mount
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setTransitionState('idle');
-      hasMountedRef.current = true;
-    }, 500);
-    return () => window.clearTimeout(timer);
-  }, []);
-
-  // Handle restore from minimized — skip on initial mount to avoid double animation
-  useEffect(() => {
-    if (!hasMountedRef.current) return undefined;
-    if (isMinimized) return undefined;
-
-    setTransitionState('restore');
-    const timer = window.setTimeout(() => setTransitionState('idle'), 500);
-    return () => window.clearTimeout(timer);
-  }, [isMinimized]);
-
-  const startDragging = (event) => {
-    if (event.button !== 0) return;
-    if (event.target.closest('button')) return;
-
-    const bounds = windowRef.current?.getBoundingClientRect();
-    if (!bounds) return;
-
-    dragOffsetRef.current = {
-      x: event.clientX - bounds.left,
-      y: event.clientY - bounds.top,
-    };
-    setIsDragging(true);
-  };
-
-  const handleMinimize = () => {
-    setTransitionState('minimize');
-    window.setTimeout(() => onMinimize?.(), 400);
-  };
-
-  const handleClose = () => {
-    setTransitionState('close');
-    window.setTimeout(() => onClose?.(), 400);
-  };
+  const {
+    windowRef,
+    position,
+    isDragging,
+    transitionState,
+    startDragging,
+    handleMinimize,
+    handleClose,
+  } = useWindowDrag({ onClose, onMinimize, isMinimized, defaultWidth: 1100, defaultHeight: 700 });
 
   if (isMinimized) {
     return null;

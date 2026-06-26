@@ -15,14 +15,14 @@ const ContactModal = ({ onClose }) => {
     const fd = new FormData(formRef.current);
 
     try {
-      const res = await fetch('https://formspree.io/f/xwpbovzl', {
+      const res = await fetch('https://formsubmit.co/ajax/rahulmadeshiya851@gmail.com', {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: fd.get('name'),
           email: fd.get('email'),
           message: fd.get('message'),
-          _replyto: fd.get('email'),
+          _subject: `New Portfolio Message from ${fd.get('name')}`,
         }),
       });
 
@@ -31,7 +31,7 @@ const ContactModal = ({ onClose }) => {
         formRef.current.reset();
       } else {
         const payload = await res.json();
-        setError(payload?.errors?.[0]?.message || 'Something went wrong.');
+        setError(payload?.message || 'Something went wrong.');
       }
     } catch {
       setError('Network error. Please check your connection.');

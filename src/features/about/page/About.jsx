@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Code2, Cpu, Database, Gauge, Layers, Minus, Sparkles, X } from 'lucide-react';
 import profileImage from '../../../assets/rahul.png';
 import { ABOUT_CONTENT } from '../utils/aboutContent';
+import { useWindowDrag } from '../../../hooks/useWindowDrag';
 
 const ICONS = {
   Layers,
@@ -9,71 +10,15 @@ const ICONS = {
   Gauge,
 };
 
-const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-
 const About = ({ onClose, onMinimize, isMinimized = false }) => {
-  const windowRef = useRef(null);
-  const dragOffsetRef = useRef({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [position, setPosition] = useState(() => {
-    if (typeof window === 'undefined') return { x: 120, y: 90 };
-
-    return {
-      x: Math.max(20, Math.round(window.innerWidth * 0.14)),
-      y: Math.max(20, Math.round(window.innerHeight * 0.08)),
-    };
-  });
-
-  useEffect(() => {
-    if (!isDragging) return undefined;
-
-    const handlePointerMove = (event) => {
-      const panelWidth = windowRef.current?.offsetWidth ?? 860;
-      const panelHeight = windowRef.current?.offsetHeight ?? 620;
-      const nextX = clamp(event.clientX - dragOffsetRef.current.x, 8, window.innerWidth - panelWidth - 8);
-      const nextY = clamp(event.clientY - dragOffsetRef.current.y, 8, window.innerHeight - panelHeight - 8);
-      setPosition({ x: nextX, y: nextY });
-    };
-
-    const stopDragging = () => setIsDragging(false);
-
-    window.addEventListener('pointermove', handlePointerMove);
-    window.addEventListener('pointerup', stopDragging);
-
-    return () => {
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('pointerup', stopDragging);
-    };
-  }, [isDragging]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const panelWidth = windowRef.current?.offsetWidth ?? 860;
-      const panelHeight = windowRef.current?.offsetHeight ?? 620;
-
-      setPosition((prev) => ({
-        x: clamp(prev.x, 8, window.innerWidth - panelWidth - 8),
-        y: clamp(prev.y, 8, window.innerHeight - panelHeight - 8),
-      }));
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const startDragging = (event) => {
-    if (event.button !== 0) return;
-    if (event.target.closest('button')) return;
-
-    const bounds = windowRef.current?.getBoundingClientRect();
-    if (!bounds) return;
-
-    dragOffsetRef.current = {
-      x: event.clientX - bounds.left,
-      y: event.clientY - bounds.top,
-    };
-    setIsDragging(true);
-  };
+  const {
+    windowRef,
+    position,
+    isDragging,
+    startDragging,
+    handleMinimize,
+    handleClose,
+  } = useWindowDrag({ onClose, onMinimize, isMinimized, defaultWidth: 860, defaultHeight: 620, defaultX: 120, defaultY: 90 });
 
   if (isMinimized) {
     return null;
@@ -105,7 +50,7 @@ const About = ({ onClose, onMinimize, isMinimized = false }) => {
                 className="window-btn window-btn--min"
                 type="button"
                 aria-label="Minimize About Me"
-                onClick={onMinimize}
+                onClick={handleMinimize}
               >
                 <Minus size={15} />
               </button>
@@ -113,7 +58,7 @@ const About = ({ onClose, onMinimize, isMinimized = false }) => {
                 className="window-btn window-btn--close"
                 type="button"
                 aria-label="Close About Me"
-                onClick={onClose}
+                onClick={handleClose}
               >
                 <X size={15} />
               </button>
